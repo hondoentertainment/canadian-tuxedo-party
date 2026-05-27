@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Vote on August and September dates for the next Canadian Tuxedo Party and share feedback on the last one.">
+  <meta name="theme-color" content="#2d4a7a">
+  <title>Next Party Poll | Canadian Tuxedo Party</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Pacifico&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍁</text></svg>">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <nav class="nav" aria-label="Main">
+      <a class="nav__brand" href="index.html">
+        <span class="nav__leaf" aria-hidden="true">🍁</span>
+        <span>Canadian Tuxedo Party</span>
+      </a>
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav__menu" id="nav-menu">
+        <li><a href="index.html#details">Details</a></li>
+        <li><a href="index.html#dress-code">Dress Code</a></li>
+        <li><a href="index.html#location">Location</a></li>
+        <li><a href="index.html#faq">FAQ</a></li>
+        <li><a href="ice-breaker.html">Ice Breaker</a></li>
+        <li><a href="game.html">Game</a></li>
+        <li><a href="poll.html" aria-current="page">Poll</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="section section--poll-hero">
+      <div class="container">
+        <header class="section__header">
+          <p class="poll-hero__eyebrow">
+            <span class="star" aria-hidden="true">★</span>
+            Help Us Plan
+            <span class="star" aria-hidden="true">★</span>
+          </p>
+          <h1 class="poll-hero__title">Next Party Poll</h1>
+          <p class="poll-hero__lead">
+            Pick the August and September dates that work for you, and tell us how the May party went.
+          </p>
+        </header>
+      </div>
+    </section>
+
+    <section class="section section--poll">
+      <div class="container">
+        <form class="poll-form" id="poll-form" novalidate>
+          <div class="form-row">
+            <label for="poll-name">Name</label>
+            <input type="text" id="poll-name" name="name" autocomplete="name" placeholder="Your name">
+          </div>
+          <div class="form-row">
+            <label for="poll-email">Email (optional)</label>
+            <input type="email" id="poll-email" name="email" autocomplete="email" placeholder="you@example.com">
+          </div>
+
+          <fieldset class="poll-fieldset">
+            <legend class="poll-fieldset__legend">August 2026 — pick all dates that work</legend>
+            <div class="poll-dates">
+              <label class="poll-date">
+                <input type="checkbox" name="dates" value="Saturday, August 1, 2026">
+                <span class="poll-date__card">
+                  <span class="poll-date__day">Sat</span>
+                  <span class="poll-date__num">1</span>
+                  <span class="poll-date__month">August</span>
+                </span>
+              </label>
+              <label class="poll-date">
+                <input type="checkbox" name="dates" value="Saturday, August 8, 2026">
+                <span class="poll-date__card">
+                  <span class="poll-date__day">Sat</span>
+                  <span class="poll-date__num">8</span>
+                  <span class="poll-date__month">August</span>
+                </span>
+              </label>
+              <label class="poll-date">
+                <input type="checkbox" name="dates" value="Saturday, August 15, 2026">
+                <span class="poll-date__card">
+                  <span class="poll-date__day">Sat</span>
+                  <span class="poll-date__num">15</span>
+                  <span class="poll-date__month">August</span>
+                </span>
+              </label>
+              <label class="poll-date">
+                <input type="checkbox" name="dates" value="Saturday, August 22, 2026">
+                <span class="poll-date__card">
+                  <span class="poll-date__day">Sat</span>
+                  <span class="poll-date__num">22</span>
+                  <span class="poll-date__month">August</span>
+                </span>
+              </label>
+              <label class="poll-date">
+                <input type="checkbox" name="dates" value="Saturday, August 29, 2026">
+                <span class="poll-date__card">
+                  <span class="poll-date__day">Sat</span>
+                  <span class="poll-date__num">29</span>
+                  <span class="poll-date__month">August</span>
+                </span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="poll-fieldset">
+            <legend class="poll-fieldset__legend">September 2026 — pick all dates that work</legend>
+            <div class="poll-dates">
+              <label class="poll-date">
+                <input type="checkbox" name="dates" value="Saturday, September 5, 2026">
+                <span class="poll-date__card">
+                  <span class="poll-date__day">Sat</span>
+                  <span class="poll-date__num">5</span>
+                  <span class="poll-date__month">September</span>
+                </span>
+              </label>
+              <label class="poll-date">
+                <input type="checkbox" name="dates" value="Saturday, September 12, 2026">
+                <span class="poll-date__card">
+                  <span class="poll-date__day">Sat</span>
+                  <span class="poll-date__num">12</span>
+                  <span class="poll-date__month">September</span>
+                </span>
+              </label>
+              <label class="poll-date">
+                <input type="checkbox" name="dates" value="Saturday, September 19, 2026">
+                <span class="poll-date__card">
+                  <span class="poll-date__day">Sat</span>
+                  <span class="poll-date__num">19</span>
+                  <span class="poll-date__month">September</span>
+                </span>
+              </label>
+              <label class="poll-date">
+                <input type="checkbox" name="dates" value="Saturday, September 26, 2026">
+                <span class="poll-date__card">
+                  <span class="poll-date__day">Sat</span>
+                  <span class="poll-date__num">26</span>
+                  <span class="poll-date__month">September</span>
+                </span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="poll-fieldset poll-fieldset--inline">
+            <legend class="poll-fieldset__legend">Other options</legend>
+            <label class="poll-option">
+              <input type="checkbox" name="dates" value="Any August or September weekend works">
+              <span>Any August or September weekend works for me</span>
+            </label>
+            <label class="poll-option">
+              <input type="checkbox" name="dates" value="None of these work">
+              <span>None of these dates work</span>
+            </label>
+          </fieldset>
+
+          <div class="form-row">
+            <label for="poll-feedback">How did the May party go?</label>
+            <textarea id="poll-feedback" name="feedback" rows="4" placeholder="What worked, what didn't, song requests for next time…"></textarea>
+          </div>
+
+          <button class="btn btn--primary btn--full" type="submit">Submit Poll</button>
+          <p class="form-note" id="poll-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p class="site-footer__title">Canadian Tuxedo Party</p>
+      <p class="site-footer__date">May 30, 2026 · 6:30 PM</p>
+      <p class="site-footer__tagline">Denim on denim since forever. 🍁</p>
+    </div>
+  </footer>
+
+  <script src="js/poll.js"></script>
+</body>
+</html>

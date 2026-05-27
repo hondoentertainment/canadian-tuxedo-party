@@ -30,7 +30,11 @@
         <li><a href="#details">Details</a></li>
         <li><a href="#dress-code">Dress Code</a></li>
         <li><a href="#location">Location</a></li>
-        <li><a href="#rsvp">RSVP</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="ice-breaker.html">Ice Breaker</a></li>
+        <li><a href="game.html">Game</a></li>
+        <li><a href="poll.html">Poll</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
       </ul>
     </nav>
   </header>
@@ -82,8 +86,17 @@
           </div>
 
           <div class="hero__actions">
-            <a class="btn btn--primary" href="#rsvp">RSVP Now</a>
+            <a class="btn btn--primary" href="ice-breaker.html">Ice Breakers</a>
+            <a class="btn btn--secondary" href="gallery.html">Photo Gallery</a>
             <a class="btn btn--secondary" href="#location">Get Directions</a>
+          </div>
+
+          <div class="qr-share" id="qr-share">
+            <div class="qr-share__frame">
+              <canvas id="qr-code" width="160" height="160" role="img" aria-label="QR code to open this website"></canvas>
+            </div>
+            <p class="qr-share__label">Scan to join the party</p>
+            <p class="qr-share__url" id="qr-url"></p>
           </div>
         </div>
       </div>
@@ -193,48 +206,42 @@
       </div>
     </section>
 
-    <section class="section section--rsvp" id="rsvp">
+    <section class="section section--faq" id="faq">
       <div class="container">
         <header class="section__header">
-          <h2>RSVP</h2>
-          <p>Let us know you're coming — and how much denim you're packing.</p>
+          <h2>FAQ</h2>
+          <p>Quick answers before you double down on denim.</p>
         </header>
-        <form class="rsvp-form" id="rsvp-form" novalidate>
-          <div class="form-row">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" required autocomplete="name" placeholder="Your name">
-          </div>
-          <div class="form-row">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required autocomplete="email" placeholder="you@example.com">
-          </div>
-          <div class="form-row">
-            <label for="guests">Number of guests</label>
-            <select id="guests" name="guests" required>
-              <option value="">Select…</option>
-              <option value="1">Just me</option>
-              <option value="2">2 guests</option>
-              <option value="3">3 guests</option>
-              <option value="4">4 guests</option>
-              <option value="5+">5+ guests</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label for="denim-level">Denim commitment level</label>
-            <select id="denim-level" name="denim-level">
-              <option value="">How much denim?</option>
-              <option value="classic">Classic — jeans &amp; jacket</option>
-              <option value="full">Full send — head to toe denim</option>
-              <option value="legend">Legend — custom denim ensemble</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label for="message">Message (optional)</label>
-            <textarea id="message" name="message" rows="3" placeholder="Song requests, dietary notes, denim inspo…"></textarea>
-          </div>
-          <button class="btn btn--primary btn--full" type="submit">Send RSVP</button>
-          <p class="form-note" id="form-status" role="status" aria-live="polite"></p>
-        </form>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary class="faq-item__question">When is the next party?</summary>
+            <div class="faq-item__answer">
+              <p>
+                We're still deciding!
+                <a href="poll.html">Visit our poll</a>
+                to vote on when it should be held and give us feedback on how this one went.
+              </p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-item__question">Where are the bathrooms?</summary>
+            <div class="faq-item__answer">
+              <p>Bathrooms are located in the <strong>lobby</strong> and in <strong>apartment 327</strong>.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-item__question">Are there prizes for best dressed?</summary>
+            <div class="faq-item__answer">
+              <p>Yes — there are prizes for the <strong>best dressed</strong>. Bring your A-game denim.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-item__question">Can Kyle and Jeremy help plan my next party?</summary>
+            <div class="faq-item__answer">
+              <p>They might! Kyle and Jeremy can help plan your next party — <strong>if you ask them nice</strong>.</p>
+            </div>
+          </details>
+        </div>
       </div>
     </section>
   </main>

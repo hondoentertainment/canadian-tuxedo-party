@@ -2,6 +2,7 @@
   "use strict";
 
   const PARTY_DATE = new Date("2026-05-30T18:30:00-07:00");
+  const SITE_URL = "https://canadian-tuxedo-party.vercel.app";
 
   /* Countdown */
   const daysEl = document.getElementById("days");
@@ -40,6 +41,27 @@
   updateCountdown();
   setInterval(updateCountdown, 1000);
 
+  /* QR code */
+  const qrCanvas = document.getElementById("qr-code");
+  const qrUrlEl = document.getElementById("qr-url");
+
+  if (qrCanvas) {
+    if (qrUrlEl) {
+      qrUrlEl.textContent = SITE_URL.replace(/^https?:\/\//, "");
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js";
+    script.onload = function () {
+      QRCode.toCanvas(qrCanvas, SITE_URL, {
+        width: 160,
+        margin: 1,
+        color: { dark: "#1e3354", light: "#faf6ef" },
+      });
+    };
+    document.head.appendChild(script);
+  }
+
   /* Mobile nav */
   const toggle = document.querySelector(".nav__toggle");
   const menu = document.getElementById("nav-menu");
@@ -58,50 +80,6 @@
         toggle.setAttribute("aria-label", "Open menu");
         menu.classList.remove("is-open");
       });
-    });
-  }
-
-  /* RSVP form */
-  const form = document.getElementById("rsvp-form");
-  const status = document.getElementById("form-status");
-
-  if (form && status) {
-    form.addEventListener("submit", function (event) {
-      event.preventDefault();
-
-      const name = form.name.value.trim();
-      const email = form.email.value.trim();
-      const guests = form.guests.value;
-
-      if (!name || !email || !guests) {
-        status.textContent = "Please fill in all required fields.";
-        status.className = "form-note form-note--error";
-        return;
-      }
-
-      const denimLevel = form["denim-level"].value;
-      const message = form.message.value.trim();
-
-      const subject = encodeURIComponent("Canadian Tuxedo Party RSVP — " + name);
-      const bodyLines = [
-        "Name: " + name,
-        "Email: " + email,
-        "Guests: " + guests,
-        "Denim level: " + (denimLevel || "Not specified"),
-        "",
-        message ? "Message:\n" + message : "",
-      ].filter(Boolean);
-
-      const mailto = "mailto:?subject=" + subject + "&body=" + encodeURIComponent(bodyLines.join("\n"));
-
-      status.textContent = "Opening your email app to send your RSVP…";
-      status.className = "form-note form-note--success";
-
-      window.location.href = mailto;
-
-      setTimeout(function () {
-        status.textContent = "Thanks! If your email app didn't open, email us directly with your RSVP details.";
-      }, 2000);
     });
   }
 })();

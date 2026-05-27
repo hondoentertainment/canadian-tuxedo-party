@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Share and browse party photos from the Canadian Tuxedo Party — denim on denim memories.">
+  <meta name="theme-color" content="#2d4a7a">
+  <title>Photo Gallery | Canadian Tuxedo Party</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Pacifico&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍁</text></svg>">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <nav class="nav" aria-label="Main">
+      <a class="nav__brand" href="index.html">
+        <span class="nav__leaf" aria-hidden="true">🍁</span>
+        <span>Canadian Tuxedo Party</span>
+      </a>
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <ul class="nav__menu" id="nav-menu">
+        <li><a href="index.html#details">Details</a></li>
+        <li><a href="index.html#dress-code">Dress Code</a></li>
+        <li><a href="index.html#location">Location</a></li>
+        <li><a href="index.html#faq">FAQ</a></li>
+        <li><a href="ice-breaker.html">Ice Breaker</a></li>
+        <li><a href="game.html">Game</a></li>
+        <li><a href="poll.html">Poll</a></li>
+        <li><a href="gallery.html" aria-current="page">Gallery</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="section section--poll-hero">
+      <div class="container">
+        <header class="section__header">
+          <p class="poll-hero__eyebrow">
+            <span class="star" aria-hidden="true">★</span>
+            Party Memories
+            <span class="star" aria-hidden="true">★</span>
+          </p>
+          <h1 class="poll-hero__title">Photo Gallery</h1>
+          <p class="poll-hero__lead">
+            Snap your best denim looks and party moments — upload a photo and browse what everyone shared.
+          </p>
+        </header>
+      </div>
+    </section>
+
+    <section class="section section--gallery">
+      <div class="container">
+        <form class="gallery-upload poll-form" id="gallery-form" novalidate>
+          <h2 class="gallery-upload__title">Submit a Photo</h2>
+
+          <div class="form-row">
+            <label for="gallery-name">Your name</label>
+            <input type="text" id="gallery-name" name="name" autocomplete="name" placeholder="Who took this?">
+          </div>
+
+          <div class="form-row">
+            <label for="gallery-caption">Caption (optional)</label>
+            <input type="text" id="gallery-caption" name="caption" maxlength="200" placeholder="Best double denim of the night">
+          </div>
+
+          <div class="form-row">
+            <span class="gallery-upload__label" id="gallery-file-label">Photo</span>
+            <div class="gallery-drop" id="gallery-drop">
+              <input
+                class="gallery-drop__input"
+                type="file"
+                id="gallery-file"
+                name="file"
+                accept="image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif"
+                aria-labelledby="gallery-file-label"
+              >
+              <div class="gallery-drop__content" id="gallery-drop-content">
+                <span class="gallery-drop__icon" aria-hidden="true">📷</span>
+                <p class="gallery-drop__text">Drag a photo here or <span>browse files</span></p>
+                <p class="gallery-drop__hint">JPEG, PNG, WebP, or GIF · up to 10 MB</p>
+              </div>
+              <div class="gallery-drop__preview is-hidden" id="gallery-preview">
+                <img id="gallery-preview-img" alt="">
+                <button class="gallery-drop__clear" type="button" id="gallery-clear">Remove</button>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn btn--primary btn--full" type="submit" id="gallery-submit">Add to Gallery</button>
+          <p class="form-note" id="gallery-status" role="status" aria-live="polite"></p>
+        </form>
+
+        <div class="gallery-section">
+          <header class="gallery-section__header">
+            <h2>Party Photos</h2>
+            <p id="gallery-count">Loading gallery…</p>
+          </header>
+          <div class="gallery-grid" id="gallery-grid" aria-live="polite"></div>
+          <p class="gallery-empty is-hidden" id="gallery-empty">No photos yet — be the first to share one!</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <dialog class="gallery-lightbox" id="gallery-lightbox" aria-labelledby="lightbox-caption">
+    <button class="gallery-lightbox__close" type="button" id="lightbox-close" aria-label="Close photo">×</button>
+    <figure class="gallery-lightbox__figure">
+      <img class="gallery-lightbox__img" id="lightbox-img" alt="">
+      <figcaption class="gallery-lightbox__caption" id="lightbox-caption"></figcaption>
+    </figure>
+  </dialog>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p class="site-footer__title">Canadian Tuxedo Party</p>
+      <p class="site-footer__date">May 30, 2026 · 6:30 PM</p>
+      <p class="site-footer__tagline">Denim on denim since forever. 🍁</p>
+    </div>
+  </footer>
+
+  <script src="js/gallery.js"></script>
+</body>
+</html>
