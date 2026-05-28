@@ -1,10 +1,12 @@
-const CACHE = "ctp-v1";
+const CACHE = "ctp-v2";
 const ASSETS = [
   "/",
   "/index.html",
   "/css/styles.css",
   "/js/config.js",
   "/js/main.js",
+  "/js/qr.js",
+  "/assets/qr-code.png",
   "/gallery.html",
   "/vote.html",
   "/host.html",

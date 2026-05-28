@@ -10,47 +10,34 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍁</text></svg>">
 </head>
 <body class="qr-print-page">
-  <main id="main" class="qr-print">
+  <main id="main" class="qr-print" data-qr-block>
     <div class="qr-print__sheet">
       <p class="qr-print__eyebrow">Canadian Tuxedo Party</p>
       <h1 class="qr-print__title">Scan to Join the Party</h1>
       <p class="qr-print__subtitle">Games · Photos · FAQ · Enter on the Woodlawn side</p>
-      <div class="qr-print__frame">
-        <canvas id="qr-print-canvas" width="320" height="320" role="img" aria-label="QR code for party website"></canvas>
+      <div class="qr-print__frame qr-block__frame">
+        <img
+          class="qr-block__img qr-print__img"
+          src="assets/qr-code.png"
+          width="320"
+          height="320"
+          alt="QR code for the Canadian Tuxedo Party website"
+        >
+        <canvas class="qr-block__canvas is-hidden" data-size="320" width="320" height="320" aria-hidden="true"></canvas>
       </div>
-      <p class="qr-print__url" id="qr-print-url"></p>
+      <p class="qr-print__url qr-block__url"></p>
       <p class="qr-print__date">Saturday, May 30, 2026 · 6:30 PM</p>
     </div>
 
     <div class="qr-print__actions no-print">
       <button class="btn btn--primary" type="button" onclick="window.print()">Print Sign</button>
       <a class="btn btn--secondary" href="assets/qr-code.png" download="canadian-tuxedo-party-qr.png">Download PNG</a>
+      <button class="btn btn--secondary qr-block__copy" type="button">Copy link</button>
       <a class="btn btn--secondary" href="index.html">Back to Site</a>
     </div>
   </main>
 
   <script src="js/config.js"></script>
-  <script>
-    (function () {
-      var siteUrl = window.CTP.SITE_URL;
-      var urlEl = document.getElementById("qr-print-url");
-      var canvas = document.getElementById("qr-print-canvas");
-
-      if (urlEl) {
-        urlEl.textContent = siteUrl.replace(/^https?:\/\//, "");
-      }
-
-      var script = document.createElement("script");
-      script.src = "https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js";
-      script.onload = function () {
-        QRCode.toCanvas(canvas, siteUrl, {
-          width: 320,
-          margin: 2,
-          color: { dark: "#1e3354", light: "#faf6ef" },
-        });
-      };
-      document.head.appendChild(script);
-    })();
-  </script>
+  <script src="js/qr.js"></script>
 </body>
 </html>

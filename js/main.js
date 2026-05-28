@@ -2,7 +2,6 @@
   "use strict";
 
   const PARTY_DATE = new Date(window.CTP ? window.CTP.PARTY_DATE : "2026-05-30T18:30:00-07:00");
-  const SITE_URL = window.CTP ? window.CTP.SITE_URL : "https://canadian-tuxedo-party.vercel.app";
 
   const daysEl = document.getElementById("days");
   const hoursEl = document.getElementById("hours");
@@ -88,26 +87,6 @@
   updateCountdown();
   setInterval(updateCountdown, 1000);
   applyPostPartyMode();
-
-  const qrCanvas = document.getElementById("qr-code");
-  const qrUrlEl = document.getElementById("qr-url");
-
-  if (qrCanvas) {
-    if (qrUrlEl) {
-      qrUrlEl.textContent = SITE_URL.replace(/^https?:\/\//, "");
-    }
-
-    const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js";
-    script.onload = function () {
-      QRCode.toCanvas(qrCanvas, SITE_URL, {
-        width: 160,
-        margin: 1,
-        color: { dark: "#1e3354", light: "#faf6ef" },
-      });
-    };
-    document.head.appendChild(script);
-  }
 
   const toggle = document.querySelector(".nav__toggle");
   const menu = document.getElementById("nav-menu");
