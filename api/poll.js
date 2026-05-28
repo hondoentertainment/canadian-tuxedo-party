@@ -1,4 +1,5 @@
 import { list, put } from "@vercel/blob";
+import { verifyAdminCode } from "./_lib/admin.js";
 
 export async function POST(request) {
   try {
@@ -40,6 +41,10 @@ export async function GET(request) {
     return Response.json({ error: "Not found." }, { status: 404 });
   }
 
+  if (!verifyAdminCode(request)) {
+    return Response.json({ error: "Invalid admin code." }, { status: 401 });
+  }
+
   try {
     const { blobs } = await list({ prefix: "poll/", limit: 1000 });
     const entries = await Promise.all(
@@ -68,9 +73,17 @@ export async function GET(request) {
       });
     });
 
-    return Response.json({ entries: valid, dateCounts });
+    const rankedDates = Object.entries(dateCounts)
+      .map(function (pair) {
+        return { date: pair[0], count: pair[1] };
+      })
+      .sort(function (a, b) {
+        return b.count - a.count || a.date.localeCompare(b.date);
+      });
+
+    return Response.json({ entries: valid, dateCounts, rankedDates, totalResponses: valid.length });
   } catch (error) {
     console.error("Poll results failed:", error);
-    return Response.json({ entries: [], dateCounts: {} });
+    return Response.json({ entries: [], dateCounts: {}, rankedDates: [], totalResponses: 0 });
   }
 }

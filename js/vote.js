@@ -2,6 +2,7 @@
   "use strict";
 
   var VOTE_KEY = "ctp-best-dressed-vote";
+  var closeTime = window.CTP ? window.CTP.VOTE_CLOSE_TIME : "2026-05-30T22:00:00-07:00";
 
   var toggle = document.querySelector(".nav__toggle");
   var menu = document.getElementById("nav-menu");
@@ -29,6 +30,10 @@
   var resultsList = document.getElementById("vote-results-list");
   var resultsTotal = document.getElementById("vote-results-total");
   var submitBtn = document.getElementById("vote-submit");
+  var winnerEl = document.getElementById("vote-winner");
+  var winnerName = document.getElementById("vote-winner-name");
+  var winnerCount = document.getElementById("vote-winner-count");
+  var voteOpenNote = document.getElementById("vote-open-note");
 
   function setStatus(message, type) {
     if (!status) {
@@ -38,26 +43,74 @@
     status.className = "form-note" + (type ? " form-note--" + type : "");
   }
 
+  function formatCloseTime() {
+    return new Date(closeTime).toLocaleString("en-US", {
+      weekday: "short",
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+    });
+  }
+
+  function applyClosedState(data) {
+    if (!data.closed) {
+      if (voteOpenNote) {
+        voteOpenNote.textContent = "Voting closes " + formatCloseTime() + ".";
+        voteOpenNote.classList.remove("is-hidden");
+      }
+      return;
+    }
+
+    if (voteOpenNote) {
+      voteOpenNote.classList.add("is-hidden");
+    }
+
+    if (form) {
+      form.classList.add("is-closed");
+    }
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+    }
+
+    if (winnerEl && data.winner) {
+      winnerName.textContent = data.winner.nominee;
+      winnerCount.textContent =
+        data.winner.count + (data.winner.count === 1 ? " vote" : " votes");
+      winnerEl.classList.remove("is-hidden");
+    }
+
+    setStatus("Voting is closed for the night.", "success");
+  }
+
   function renderResults(data) {
     if (!resultsEl || !resultsList || !resultsTotal) {
       return;
     }
 
+    applyClosedState(data);
     resultsList.innerHTML = "";
     var results = data.results || [];
 
     if (results.length === 0) {
-      resultsTotal.textContent = "No votes yet — cast the first one!";
+      resultsTotal.textContent = data.closed
+        ? "No votes were cast."
+        : "No votes yet — cast the first one!";
       resultsEl.classList.remove("is-hidden");
       return;
     }
 
-    resultsTotal.textContent =
-      data.totalVotes === 1 ? "1 vote counted" : data.totalVotes + " votes counted";
+    resultsTotal.textContent = data.closed
+      ? "Final results — " +
+        (data.totalVotes === 1 ? "1 vote" : data.totalVotes + " votes")
+      : data.totalVotes === 1
+        ? "1 vote counted"
+        : data.totalVotes + " votes counted";
 
     results.forEach(function (item, index) {
       var row = document.createElement("li");
-      row.className = "vote-result";
+      row.className = "vote-result" + (data.closed && index === 0 ? " vote-result--winner" : "");
       row.innerHTML =
         '<span class="vote-result__rank">' +
         (index + 1) +
@@ -88,8 +141,10 @@
 
   if (localStorage.getItem(VOTE_KEY) && form) {
     form.classList.add("is-voted");
-    setStatus("You already voted — thanks!", "success");
-    if (submitBtn) {
+    if (!form.classList.contains("is-closed")) {
+      setStatus("You already voted — thanks!", "success");
+    }
+    if (submitBtn && !form.classList.contains("is-closed")) {
       submitBtn.disabled = true;
     }
   }
@@ -97,6 +152,11 @@
   if (form && status) {
     form.addEventListener("submit", function (event) {
       event.preventDefault();
+
+      if (form.classList.contains("is-closed")) {
+        setStatus("Voting is closed for the night.", "error");
+        return;
+      }
 
       if (localStorage.getItem(VOTE_KEY)) {
         setStatus("You already voted on this device.", "error");
@@ -135,7 +195,9 @@
         })
         .catch(function (error) {
           setStatus(error.message || "Something went wrong. Please try again.", "error");
-          submitBtn.disabled = false;
+          if (!form.classList.contains("is-closed")) {
+            submitBtn.disabled = false;
+          }
         });
     });
   }

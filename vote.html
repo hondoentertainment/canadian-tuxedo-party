@@ -54,12 +54,19 @@
           <p class="poll-hero__lead">
             Who rocked the boldest Canadian tuxedo tonight? Cast your vote — one per device.
           </p>
+          <p class="vote-open-note is-hidden" id="vote-open-note"></p>
         </header>
       </div>
     </section>
 
     <section class="section section--vote">
       <div class="container">
+        <div class="vote-winner is-hidden" id="vote-winner" role="status" aria-live="polite">
+          <p class="vote-winner__eyebrow">Best Dressed Winner</p>
+          <p class="vote-winner__name" id="vote-winner-name"></p>
+          <p class="vote-winner__count" id="vote-winner-count"></p>
+        </div>
+
         <form class="poll-form" id="vote-form" novalidate>
           <div class="form-row">
             <label for="vote-voter">Your name</label>
@@ -92,6 +99,7 @@
     </div>
   </footer>
 
+  <script src="js/config.js"></script>
   <script src="js/vote.js"></script>
 </body>
 </html>

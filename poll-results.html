@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#2d4a7a">
+  <title>Poll Results | Canadian Tuxedo Party</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍁</text></svg>">
+</head>
+<body>
+  <main id="main" class="section section--admin">
+    <div class="container">
+      <header class="section__header">
+        <h1>Poll Results</h1>
+        <p>Date preferences and feedback for the next party.</p>
+      </header>
+
+      <form class="poll-form admin-code-form" id="poll-results-code-form">
+        <div class="form-row">
+          <label for="poll-results-code">Admin code</label>
+          <input type="password" id="poll-results-code" autocomplete="current-password" placeholder="Same as GALLERY_ADMIN_CODE">
+        </div>
+        <button class="btn btn--primary btn--full" type="submit">View Results</button>
+        <p class="form-note" id="poll-results-status" role="status" aria-live="polite"></p>
+      </form>
+
+      <div class="poll-results-panel is-hidden" id="poll-results-panel">
+        <p class="poll-results-summary" id="poll-results-summary"></p>
+
+        <section class="poll-results-block">
+          <h2>Date Rankings</h2>
+          <ol class="poll-results-dates" id="poll-results-dates"></ol>
+        </section>
+
+        <section class="poll-results-block">
+          <h2>All Responses</h2>
+          <div class="poll-results-entries" id="poll-results-entries"></div>
+        </section>
+      </div>
+
+      <p class="admin-back"><a href="host.html">← Host dashboard</a></p>
+    </div>
+  </main>
+
+  <script src="js/poll-results.js"></script>
+</body>
+</html>

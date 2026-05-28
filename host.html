@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#2d4a7a">
+  <title>Host Dashboard | Canadian Tuxedo Party</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍁</text></svg>">
+</head>
+<body>
+  <main id="main" class="section section--admin">
+    <div class="container">
+      <header class="section__header">
+        <h1>Host Dashboard</h1>
+        <p>Party-night checklist and quick links for Kyle &amp; Jeremy.</p>
+      </header>
+
+      <form class="poll-form admin-code-form" id="host-code-form">
+        <div class="form-row">
+          <label for="host-code">Admin code</label>
+          <input type="password" id="host-code" autocomplete="current-password" placeholder="Set in Vercel as GALLERY_ADMIN_CODE">
+        </div>
+        <button class="btn btn--primary btn--full" type="submit">Unlock Dashboard</button>
+        <p class="form-note" id="host-status" role="status" aria-live="polite"></p>
+      </form>
+
+      <div class="host-dashboard is-hidden" id="host-dashboard">
+        <section class="host-block">
+          <h2>Pre-Party Checklist</h2>
+          <div class="host-checklist" id="host-checklist"></div>
+        </section>
+
+        <section class="host-block">
+          <h2>Best Dressed Status</h2>
+          <p class="host-vote-status" id="host-vote-status">Loading…</p>
+        </section>
+
+        <section class="host-block">
+          <h2>Quick Links</h2>
+          <div class="host-links">
+            <a class="btn btn--primary" href="qr.html" target="_blank" rel="noopener">Print QR Sign</a>
+            <a class="btn btn--secondary" href="https://name-that-canadian.vercel.app" target="_blank" rel="noopener">Trivia Full Screen</a>
+            <a class="btn btn--secondary" href="admin.html">Gallery Admin</a>
+            <a class="btn btn--secondary" href="poll-results.html">Poll Results</a>
+            <a class="btn btn--secondary" href="vote.html">Best Dressed Vote</a>
+            <a class="btn btn--secondary" href="gallery.html">Photo Gallery</a>
+          </div>
+        </section>
+
+        <section class="host-block host-block--note">
+          <h2>Custom Domain</h2>
+          <p>
+            In Vercel → <strong>Settings → Domains</strong>, add your domain and point DNS as instructed.
+            Then update <code>SITE_URL</code> in <code>js/config.js</code> and redeploy.
+          </p>
+        </section>
+      </div>
+
+      <p class="admin-back"><a href="index.html">← Back to party site</a></p>
+    </div>
+  </main>
+
+  <script src="js/host.js"></script>
+</body>
+</html>

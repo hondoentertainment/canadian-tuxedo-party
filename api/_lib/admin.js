@@ -12,3 +12,11 @@ export function verifyAdminCode(request) {
   const query = url.searchParams.get("code");
   return header === expected || query === expected;
 }
+
+export function getVoteCloseTime() {
+  return process.env.VOTE_CLOSE_TIME || "2026-05-30T22:00:00-07:00";
+}
+
+export function isVoteClosed() {
+  return Date.now() >= new Date(getVoteCloseTime()).getTime();
+}

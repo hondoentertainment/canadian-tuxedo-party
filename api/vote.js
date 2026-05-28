@@ -1,10 +1,33 @@
 import { list, put } from "@vercel/blob";
+import { getVoteCloseTime, isVoteClosed } from "./_lib/admin.js";
 
 function normalizeName(value) {
   return String(value || "")
     .trim()
     .replace(/\s+/g, " ")
     .slice(0, 80);
+}
+
+function buildResults(valid) {
+  const tally = {};
+
+  valid.forEach(function (vote) {
+    const nominee = vote.nominee;
+    if (!nominee) {
+      return;
+    }
+    if (!tally[nominee]) {
+      tally[nominee] = { nominee, count: 0 };
+    }
+    tally[nominee].count += 1;
+  });
+
+  const results = Object.values(tally).sort(function (a, b) {
+    return b.count - a.count || a.nominee.localeCompare(b.nominee);
+  });
+
+  const winner = results.length > 0 ? results[0] : null;
+  return { results, winner };
 }
 
 export async function GET() {
@@ -25,31 +48,33 @@ export async function GET() {
     );
 
     const valid = votes.filter(Boolean);
-    const tally = {};
+    const { results, winner } = buildResults(valid);
+    const closed = isVoteClosed();
 
-    valid.forEach(function (vote) {
-      const nominee = vote.nominee;
-      if (!nominee) {
-        return;
-      }
-      if (!tally[nominee]) {
-        tally[nominee] = { nominee, count: 0 };
-      }
-      tally[nominee].count += 1;
+    return Response.json({
+      results,
+      totalVotes: valid.length,
+      closed,
+      closesAt: getVoteCloseTime(),
+      winner: closed ? winner : null,
     });
-
-    const results = Object.values(tally).sort(function (a, b) {
-      return b.count - a.count || a.nominee.localeCompare(b.nominee);
-    });
-
-    return Response.json({ results, totalVotes: valid.length });
   } catch (error) {
     console.error("Vote results failed:", error);
-    return Response.json({ results: [], totalVotes: 0 });
+    return Response.json({
+      results: [],
+      totalVotes: 0,
+      closed: isVoteClosed(),
+      closesAt: getVoteCloseTime(),
+      winner: null,
+    });
   }
 }
 
 export async function POST(request) {
+  if (isVoteClosed()) {
+    return Response.json({ error: "Voting is closed for the night." }, { status: 403 });
+  }
+
   try {
     const body = await request.json();
     const voter = normalizeName(body.voter);
