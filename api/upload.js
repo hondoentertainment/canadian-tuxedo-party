@@ -1,4 +1,5 @@
 import { put } from "@vercel/blob";
+import { isModerationEnabled } from "./_lib/admin.js";
 
 const MAX_SIZE = 10 * 1024 * 1024;
 const ALLOWED = new Set([
@@ -35,6 +36,7 @@ export async function POST(request) {
     const id = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
     const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
     const imagePath = `gallery/${id}.${ext}`;
+    const moderated = isModerationEnabled();
 
     const imageBlob = await put(imagePath, file, {
       access: "public",
@@ -47,6 +49,7 @@ export async function POST(request) {
       name,
       caption,
       uploadedAt: new Date().toISOString(),
+      status: moderated ? "pending" : "approved",
     };
 
     await put(`gallery/${id}.json`, JSON.stringify(metadata), {
@@ -54,7 +57,13 @@ export async function POST(request) {
       contentType: "application/json",
     });
 
-    return Response.json(metadata);
+    return Response.json({
+      ...metadata,
+      pending: moderated,
+      message: moderated
+        ? "Photo submitted for review — it will appear once approved."
+        : "Photo added to the gallery!",
+    });
   } catch (error) {
     console.error("Upload failed:", error);
     return Response.json(

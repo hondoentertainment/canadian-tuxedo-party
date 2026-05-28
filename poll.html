@@ -6,6 +6,7 @@
   <meta name="description" content="Vote on August and September dates for the next Canadian Tuxedo Party and share feedback on the last one.">
   <meta name="theme-color" content="#2d4a7a">
   <title>Next Party Poll | Canadian Tuxedo Party</title>
+  <link rel="manifest" href="manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Pacifico&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -33,6 +34,7 @@
         <li><a href="index.html#faq">FAQ</a></li>
         <li><a href="ice-breaker.html">Ice Breaker</a></li>
         <li><a href="name-that-canadian.html">Name That Canadian</a></li>
+        <li><a href="vote.html">Best Dressed</a></li>
         <li><a href="poll.html" aria-current="page">Poll</a></li>
         <li><a href="gallery.html">Gallery</a></li>
       </ul>
@@ -169,7 +171,7 @@
             <textarea id="poll-feedback" name="feedback" rows="4" placeholder="What worked, what didn't, song requests for next time…"></textarea>
           </div>
 
-          <button class="btn btn--primary btn--full" type="submit">Submit Poll</button>
+          <button class="btn btn--primary btn--full" type="submit" id="poll-submit">Submit Poll</button>
           <p class="form-note" id="poll-status" role="status" aria-live="polite"></p>
         </form>
       </div>

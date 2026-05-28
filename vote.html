@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Name That Canadian — live trivia to identify famous Canadians at the Canadian Tuxedo Party.">
+  <meta name="description" content="Vote for best dressed at the Canadian Tuxedo Party — boldest denim wins.">
   <meta name="theme-color" content="#2d4a7a">
-  <title>Name That Canadian | Canadian Tuxedo Party</title>
+  <title>Best Dressed Vote | Canadian Tuxedo Party</title>
   <link rel="manifest" href="manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,8 +33,8 @@
         <li><a href="index.html#location">Location</a></li>
         <li><a href="index.html#faq">FAQ</a></li>
         <li><a href="ice-breaker.html">Ice Breaker</a></li>
-        <li><a href="name-that-canadian.html" aria-current="page">Name That Canadian</a></li>
-        <li><a href="vote.html">Best Dressed</a></li>
+        <li><a href="name-that-canadian.html">Name That Canadian</a></li>
+        <li><a href="vote.html" aria-current="page">Best Dressed</a></li>
         <li><a href="poll.html">Poll</a></li>
         <li><a href="gallery.html">Gallery</a></li>
       </ul>
@@ -42,41 +42,43 @@
   </header>
 
   <main id="main">
-    <section class="section section--tab-hero">
+    <section class="section section--poll-hero">
       <div class="container">
         <header class="section__header">
-          <p class="tab-hero__eyebrow">
+          <p class="poll-hero__eyebrow">
             <span class="star" aria-hidden="true">★</span>
-            Party Edition
+            Party Prize
             <span class="star" aria-hidden="true">★</span>
           </p>
-          <h1 class="tab-hero__title">Name That Canadian</h1>
-          <p class="tab-hero__lead">
-            Live hosted trivia — identify famous Canadians through hints before time runs out.
-            Use <strong>Open Full Screen</strong> to project on a TV.
+          <h1 class="poll-hero__title">Best Dressed Vote</h1>
+          <p class="poll-hero__lead">
+            Who rocked the boldest Canadian tuxedo tonight? Cast your vote — one per device.
           </p>
-          <div class="embed-toolbar">
-            <a
-              class="btn btn--primary"
-              href="https://name-that-canadian.vercel.app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >Open Full Screen</a>
-            <a class="btn btn--secondary" href="index.html">Back to Party Info</a>
-          </div>
         </header>
       </div>
     </section>
 
-    <section class="section section--embed">
+    <section class="section section--vote">
       <div class="container">
-        <div class="embed-frame">
-          <iframe
-            title="Name That Canadian trivia"
-            src="https://name-that-canadian.vercel.app"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
+        <form class="poll-form" id="vote-form" novalidate>
+          <div class="form-row">
+            <label for="vote-voter">Your name</label>
+            <input type="text" id="vote-voter" name="voter" autocomplete="name" required placeholder="Your name">
+          </div>
+          <div class="form-row">
+            <label for="vote-nominee">Who gets your vote?</label>
+            <input type="text" id="vote-nominee" name="nominee" required placeholder="Best denim look of the night">
+          </div>
+          <button class="btn btn--primary btn--full" type="submit" id="vote-submit">Submit Vote</button>
+          <p class="form-note" id="vote-status" role="status" aria-live="polite"></p>
+        </form>
+
+        <div class="vote-results is-hidden" id="vote-results">
+          <header class="vote-results__header">
+            <h2>Live Results</h2>
+            <p id="vote-results-total">Loading results…</p>
+          </header>
+          <ol class="vote-results__list" id="vote-results-list"></ol>
         </div>
       </div>
     </section>
@@ -90,6 +92,6 @@
     </div>
   </footer>
 
-  <script src="js/main.js"></script>
+  <script src="js/vote.js"></script>
 </body>
 </html>

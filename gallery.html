@@ -6,6 +6,7 @@
   <meta name="description" content="Share and browse party photos from the Canadian Tuxedo Party — denim on denim memories.">
   <meta name="theme-color" content="#2d4a7a">
   <title>Photo Gallery | Canadian Tuxedo Party</title>
+  <link rel="manifest" href="manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Pacifico&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -33,6 +34,7 @@
         <li><a href="index.html#faq">FAQ</a></li>
         <li><a href="ice-breaker.html">Ice Breaker</a></li>
         <li><a href="name-that-canadian.html">Name That Canadian</a></li>
+        <li><a href="vote.html">Best Dressed</a></li>
         <li><a href="poll.html">Poll</a></li>
         <li><a href="gallery.html" aria-current="page">Gallery</a></li>
       </ul>
@@ -51,6 +53,7 @@
           <h1 class="poll-hero__title">Photo Gallery</h1>
           <p class="poll-hero__lead">
             Snap your best denim looks and party moments — upload a photo and browse what everyone shared.
+            Photos may be reviewed before they appear.
           </p>
         </header>
       </div>
@@ -96,6 +99,7 @@
 
           <button class="btn btn--primary btn--full" type="submit" id="gallery-submit">Add to Gallery</button>
           <p class="form-note" id="gallery-status" role="status" aria-live="polite"></p>
+          <p class="gallery-admin-link"><a href="admin.html">Photo review (hosts)</a></p>
         </form>
 
         <div class="gallery-section">

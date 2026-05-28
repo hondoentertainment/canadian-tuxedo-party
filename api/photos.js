@@ -1,5 +1,13 @@
 import { list } from "@vercel/blob";
 
+async function loadMetadata(metaBlob) {
+  const response = await fetch(metaBlob.url);
+  if (!response.ok) {
+    return null;
+  }
+  return response.json();
+}
+
 export async function GET() {
   try {
     const { blobs } = await list({ prefix: "gallery/", limit: 1000 });
@@ -7,22 +15,19 @@ export async function GET() {
       return blob.pathname.endsWith(".json");
     });
 
-    const photos = await Promise.all(
-      metaBlobs.map(async function (metaBlob) {
-        const response = await fetch(metaBlob.url);
-        if (!response.ok) {
-          return null;
-        }
-        return response.json();
-      })
-    );
+    const photos = await Promise.all(metaBlobs.map(loadMetadata));
+    const approved = photos.filter(function (photo) {
+      if (!photo) {
+        return false;
+      }
+      return !photo.status || photo.status === "approved";
+    });
 
-    const validPhotos = photos.filter(Boolean);
-    validPhotos.sort(function (a, b) {
+    approved.sort(function (a, b) {
       return new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime();
     });
 
-    return Response.json({ photos: validPhotos });
+    return Response.json({ photos: approved });
   } catch (error) {
     console.error("Failed to list photos:", error);
     return Response.json({ photos: [] });

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#2d4a7a">
+  <title>Gallery Admin | Canadian Tuxedo Party</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍁</text></svg>">
+</head>
+<body>
+  <main id="main" class="section section--admin">
+    <div class="container">
+      <header class="section__header">
+        <h1>Gallery Admin</h1>
+        <p>Approve or reject pending photo uploads.</p>
+      </header>
+
+      <form class="poll-form admin-code-form" id="admin-code-form">
+        <div class="form-row">
+          <label for="admin-code">Admin code</label>
+          <input type="password" id="admin-code" name="code" autocomplete="current-password" placeholder="Set in Vercel as GALLERY_ADMIN_CODE">
+        </div>
+        <button class="btn btn--primary btn--full" type="submit">Unlock</button>
+        <p class="form-note" id="admin-status" role="status" aria-live="polite"></p>
+      </form>
+
+      <div class="admin-panel is-hidden" id="admin-panel">
+        <div class="admin-pending" id="admin-pending-list"></div>
+      </div>
+
+      <p class="admin-back"><a href="gallery.html">← Back to gallery</a></p>
+    </div>
+  </main>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

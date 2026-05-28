@@ -1,0 +1,17 @@
+{
+  "name": "Canadian Tuxedo Party",
+  "short_name": "Tuxedo Party",
+  "description": "Canadian Tuxedo Party — May 30, 2026. Games, photos, and party info.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#e8dcc8",
+  "theme_color": "#2d4a7a",
+  "icons": [
+    {
+      "src": "/assets/poster.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

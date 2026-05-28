@@ -924,6 +924,342 @@ a:hover {
   background: rgba(0, 0, 0, 0.55);
 }
 
+/* Post-party & party-night */
+
+.post-party {
+  margin: 1.25rem 0;
+  padding: 1.25rem;
+  background: rgba(212, 168, 67, 0.18);
+  border: 3px solid var(--stitch);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.post-party__message {
+  margin: 0 0 1rem;
+  font-family: var(--font-script);
+  font-size: 1.35rem;
+  color: var(--denim);
+}
+
+.post-party__actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.section--party-night {
+  background:
+    linear-gradient(180deg, rgba(45, 74, 122, 0.08) 0%, transparent 100%),
+    var(--cream);
+}
+
+.party-night-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.party-night-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1.35rem;
+  background: var(--white);
+  border: 3px solid var(--denim);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 24px var(--shadow);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.party-night-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--stitch);
+  color: inherit;
+}
+
+.party-night-card__icon {
+  font-size: 2rem;
+}
+
+.party-night-card h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  letter-spacing: 0.05em;
+  color: var(--denim);
+}
+
+.party-night-card p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.qr-share__print {
+  margin: 0.35rem 0 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* Embed pages */
+
+.embed-toolbar {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1.25rem;
+}
+
+.section--embed {
+  padding-top: 0;
+}
+
+.embed-frame iframe {
+  width: 100%;
+  min-height: 70vh;
+  border: 3px solid var(--denim);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 24px var(--shadow);
+}
+
+/* Best Dressed Vote */
+
+.section--vote {
+  background:
+    linear-gradient(135deg, rgba(45, 74, 122, 0.06) 0%, transparent 50%),
+    var(--wood);
+}
+
+.vote-results {
+  max-width: 640px;
+  margin: 2.5rem auto 0;
+  padding: 1.5rem;
+  background: var(--white);
+  border: 3px solid var(--denim);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 24px var(--shadow);
+}
+
+.vote-results__header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.vote-results__header h2 {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  letter-spacing: 0.05em;
+  color: var(--denim);
+}
+
+.vote-results__header p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.vote-results__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.vote-result {
+  display: grid;
+  grid-template-columns: 2rem 1fr auto;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(45, 74, 122, 0.12);
+}
+
+.vote-result:last-child {
+  border-bottom: none;
+}
+
+.vote-result__rank {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--stitch);
+}
+
+.vote-result__name {
+  font-weight: 700;
+  color: var(--denim);
+}
+
+.vote-result__count {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.is-voted .form-row {
+  opacity: 0.65;
+}
+
+/* Gallery admin */
+
+.gallery-admin-link {
+  margin: 0.75rem 0 0;
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.section--admin {
+  min-height: 100vh;
+  padding: 3rem 0;
+  background: var(--wood);
+}
+
+.admin-panel {
+  margin-top: 2rem;
+}
+
+.admin-pending {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.admin-card {
+  background: var(--white);
+  border: 3px solid var(--denim);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 8px 24px var(--shadow);
+}
+
+.admin-card img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.admin-card__body {
+  padding: 1rem;
+}
+
+.admin-card__body h3 {
+  margin: 0 0 0.35rem;
+  color: var(--denim);
+}
+
+.admin-card__body p {
+  margin: 0 0 0.75rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.admin-card__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.admin-card__actions .btn {
+  flex: 1;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.9rem;
+}
+
+.admin-empty {
+  text-align: center;
+  color: var(--text-muted);
+  grid-column: 1 / -1;
+}
+
+.admin-back {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+/* Printable QR */
+
+.qr-print-page {
+  background: var(--cream);
+}
+
+.qr-print {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 2rem 1rem;
+}
+
+.qr-print__sheet {
+  max-width: 520px;
+  padding: 2rem;
+  text-align: center;
+  background: var(--white);
+  border: 4px solid var(--denim);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 32px var(--shadow);
+}
+
+.qr-print__eyebrow {
+  margin: 0 0 0.5rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--denim);
+}
+
+.qr-print__title {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  letter-spacing: 0.06em;
+  color: var(--denim);
+}
+
+.qr-print__subtitle,
+.qr-print__date {
+  margin: 0 0 1rem;
+  color: var(--text-muted);
+}
+
+.qr-print__frame {
+  display: inline-block;
+  padding: 1rem;
+  background: var(--cream);
+  border: 3px solid var(--stitch);
+  border-radius: var(--radius);
+}
+
+.qr-print__url {
+  margin: 1rem 0 0;
+  font-weight: 700;
+  color: var(--denim);
+}
+
+.qr-print__actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  .qr-print-page {
+    background: white;
+  }
+
+  .qr-print__sheet {
+    box-shadow: none;
+  }
+}
+
 .section__header {
   text-align: center;
   margin-bottom: 2.5rem;
@@ -1256,8 +1592,16 @@ a:hover {
     grid-template-columns: 1fr;
   }
 
-  .game-grid {
+  .party-night-grid {
     grid-template-columns: 1fr;
+  }
+
+  .post-party__actions {
+    flex-direction: column;
+  }
+
+  .admin-card__actions {
+    flex-direction: column;
   }
 }
 

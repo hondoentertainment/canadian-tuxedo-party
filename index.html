@@ -5,7 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Canadian Tuxedo Party — Saturday, May 30, 2026 at 6:30 PM. 6900 East Greenlake Way N, Seattle. Enter on the Woodlawn side.">
   <meta name="theme-color" content="#2d4a7a">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Canadian Tuxedo Party | May 30, 2026">
+  <meta property="og:description" content="Double denim. Good times. Games, photo gallery, and party info — enter on the Woodlawn side.">
+  <meta property="og:url" content="https://canadian-tuxedo-party.vercel.app/">
+  <meta property="og:image" content="https://canadian-tuxedo-party.vercel.app/assets/poster.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Canadian Tuxedo Party | May 30, 2026">
+  <meta name="twitter:description" content="Double denim. Good times. Games, photo gallery, and party info.">
+  <meta name="twitter:image" content="https://canadian-tuxedo-party.vercel.app/assets/poster.png">
   <title>Canadian Tuxedo Party | May 30, 2026</title>
+  <link rel="manifest" href="manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Pacifico&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
@@ -33,6 +43,7 @@
         <li><a href="#faq">FAQ</a></li>
         <li><a href="ice-breaker.html">Ice Breaker</a></li>
         <li><a href="name-that-canadian.html">Name That Canadian</a></li>
+        <li><a href="vote.html">Best Dressed</a></li>
         <li><a href="poll.html">Poll</a></li>
         <li><a href="gallery.html">Gallery</a></li>
       </ul>
@@ -53,7 +64,7 @@
           >
         </div>
         <div class="hero__content">
-          <p class="hero__eyebrow">
+          <p class="hero__eyebrow" id="hero-eyebrow">
             <span class="star" aria-hidden="true">★</span>
             You're Invited
             <span class="star" aria-hidden="true">★</span>
@@ -64,7 +75,15 @@
             <span class="hero__title-party">Party!</span>
           </h1>
           <p class="hero__date">Saturday, May 30, 2026 · 6:30 PM</p>
-          <p class="hero__tagline">Double denim. Good times. Woodlawn side entrance.</p>
+          <p class="hero__tagline" id="hero-tagline">Double denim. Good times. Woodlawn side entrance.</p>
+
+          <div class="post-party is-hidden" id="post-party">
+            <p class="post-party__message">What a night! Share your photos and vote for best dressed.</p>
+            <div class="post-party__actions">
+              <a class="btn btn--primary" href="gallery.html">View Gallery</a>
+              <a class="btn btn--secondary" href="poll.html">Plan the Next One</a>
+            </div>
+          </div>
 
           <div class="countdown" aria-live="polite" aria-label="Countdown to the party">
             <div class="countdown__unit">
@@ -87,6 +106,7 @@
 
           <div class="hero__actions">
             <a class="btn btn--primary" href="ice-breaker.html">Ice Breakers</a>
+            <a class="btn btn--secondary" href="name-that-canadian.html">Name That Canadian</a>
             <a class="btn btn--secondary" href="gallery.html">Photo Gallery</a>
             <a class="btn btn--secondary" href="#location">Get Directions</a>
           </div>
@@ -97,6 +117,7 @@
             </div>
             <p class="qr-share__label">Scan to join the party</p>
             <p class="qr-share__url" id="qr-url"></p>
+            <a class="qr-share__print" href="qr.html">Print QR sign for the entrance</a>
           </div>
         </div>
       </div>
@@ -127,6 +148,37 @@
             <p><strong>Casual &amp; fun</strong></p>
             <p>Rustic, laid-back, and ready to celebrate. The more denim, the merrier.</p>
           </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--party-night" id="party-night">
+      <div class="container">
+        <header class="section__header">
+          <h2 class="party-night__heading">At the Party</h2>
+          <p class="party-night__lead">Everything you need from your phone — games, photos, and votes.</p>
+        </header>
+        <div class="party-night-grid">
+          <a class="party-night-card" href="gallery.html">
+            <span class="party-night-card__icon" aria-hidden="true">📷</span>
+            <h3>Photo Gallery</h3>
+            <p>Upload your best denim looks and browse everyone's shots.</p>
+          </a>
+          <a class="party-night-card" href="name-that-canadian.html">
+            <span class="party-night-card__icon" aria-hidden="true">🍁</span>
+            <h3>Name That Canadian</h3>
+            <p>Live trivia — project it on the TV or play on your phone.</p>
+          </a>
+          <a class="party-night-card" href="ice-breaker.html">
+            <span class="party-night-card__icon" aria-hidden="true">💬</span>
+            <h3>Ice Breakers</h3>
+            <p>Conversation starters for a denim-on-denim crowd.</p>
+          </a>
+          <a class="party-night-card" href="vote.html">
+            <span class="party-night-card__icon" aria-hidden="true">👑</span>
+            <h3>Best Dressed Vote</h3>
+            <p>Cast your vote for the boldest Canadian tuxedo of the night.</p>
+          </a>
         </div>
       </div>
     </section>
@@ -217,7 +269,7 @@
             <summary class="faq-item__question">How do I invite someone up?</summary>
             <div class="faq-item__answer">
               <p>
-                Have your guest buzz <strong>Kyle</strong> through the <strong>Woodlawn entrance</strong> and we'll let them in.
+                Have your guest buzz <strong>Kyle</strong> (apartment <strong>327</strong>) at the <strong>Woodlawn entrance</strong> and we'll let them in.
               </p>
             </div>
           </details>
@@ -230,7 +282,7 @@
           <details class="faq-item">
             <summary class="faq-item__question">Are there prizes for best dressed?</summary>
             <div class="faq-item__answer">
-              <p>Yes — there are prizes for the <strong>best dressed</strong>. Bring your A-game denim.</p>
+              <p>Yes — there are prizes for the <strong>best dressed</strong>. <a href="vote.html">Cast your vote</a> and bring your A-game denim.</p>
             </div>
           </details>
           <details class="faq-item">
@@ -270,6 +322,7 @@
     </div>
   </footer>
 
+  <script src="js/config.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

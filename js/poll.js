@@ -1,7 +1,6 @@
 (function () {
   "use strict";
 
-  /* Mobile nav */
   const toggle = document.querySelector(".nav__toggle");
   const menu = document.getElementById("nav-menu");
 
@@ -22,9 +21,9 @@
     });
   }
 
-  /* Poll form */
   const form = document.getElementById("poll-form");
   const status = document.getElementById("poll-status");
+  const submitBtn = document.getElementById("poll-submit");
 
   if (form && status) {
     form.addEventListener("submit", function (event) {
@@ -43,31 +42,44 @@
         return;
       }
 
-      const subject = encodeURIComponent(
-        "Next Party Poll" + (name ? " — " + name : "")
-      );
-      const bodyLines = [
-        name ? "Name: " + name : "Name: (not provided)",
-        email ? "Email: " + email : "Email: (not provided)",
-        "",
-        "Preferred dates:",
-        ...selectedDates.map(function (date) {
-          return "• " + date;
+      if (submitBtn) {
+        submitBtn.disabled = true;
+      }
+      status.textContent = "Saving your response…";
+      status.className = "form-note";
+
+      fetch("/api/poll", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name,
+          email: email,
+          dates: selectedDates,
+          feedback: feedback,
         }),
-        "",
-        feedback ? "Feedback on May party:\n" + feedback : "Feedback on May party: (none provided)",
-      ];
-
-      const mailto = "mailto:?subject=" + subject + "&body=" + encodeURIComponent(bodyLines.join("\n"));
-
-      status.textContent = "Opening your email app to send your poll response…";
-      status.className = "form-note form-note--success";
-
-      window.location.href = mailto;
-
-      setTimeout(function () {
-        status.textContent = "Thanks! If your email app didn't open, send us your date picks and feedback directly.";
-      }, 2000);
+      })
+        .then(function (response) {
+          return response.json().then(function (data) {
+            if (!response.ok) {
+              throw new Error(data.error || "Submission failed.");
+            }
+            return data;
+          });
+        })
+        .then(function (data) {
+          status.textContent = data.message || "Thanks — your poll response was saved!";
+          status.className = "form-note form-note--success";
+          form.reset();
+        })
+        .catch(function (error) {
+          status.textContent = error.message || "Something went wrong. Please try again.";
+          status.className = "form-note form-note--error";
+        })
+        .finally(function () {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+          }
+        });
     });
   }
 })();

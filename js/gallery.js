@@ -311,7 +311,10 @@
         uploadedAt: new Date().toISOString(),
       };
       return idbPut(photo).then(function () {
-        return photo;
+        return {
+          pending: false,
+          message: "Photo saved locally. Deploy to Vercel with Blob storage to share with everyone.",
+        };
       });
     });
   }
@@ -357,16 +360,19 @@
           }
           return uploadLocal(selectedFile, name, caption);
         })
-        .then(function () {
+        .then(function (data) {
           clearPreview();
           form.caption.value = "";
           setStatus(
-            apiAvailable
-              ? "Photo added to the gallery!"
-              : "Photo saved locally. Deploy to Vercel with Blob storage to share with everyone.",
+            data.message ||
+              (apiAvailable
+                ? "Photo added to the gallery!"
+                : "Photo saved locally. Deploy to Vercel with Blob storage to share with everyone."),
             "success"
           );
-          return refreshGallery();
+          if (!data.pending) {
+            return refreshGallery();
+          }
         })
         .catch(function (error) {
           setStatus(error.message || "Something went wrong. Please try again.", "error");
