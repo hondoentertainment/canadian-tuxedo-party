@@ -3,13 +3,13 @@ export function isModerationEnabled() {
 }
 
 export function verifyAdminCode(request) {
-  const expected = process.env.GALLERY_ADMIN_CODE;
+  const expected = String(process.env.GALLERY_ADMIN_CODE || "").trim();
   if (!expected) {
     return false;
   }
-  const header = request.headers.get("x-admin-code");
+  const header = String(request.headers.get("x-admin-code") || "").trim();
   const url = new URL(request.url);
-  const query = url.searchParams.get("code");
+  const query = String(url.searchParams.get("code") || "").trim();
   return header === expected || query === expected;
 }
 
