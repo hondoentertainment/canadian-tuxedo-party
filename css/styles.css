@@ -354,6 +354,11 @@ a:hover {
   box-shadow:
     0 4px 16px var(--shadow),
     inset 0 0 0 2px var(--stitch);
+  min-width: 200px;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .qr-share__frame canvas,
@@ -2064,6 +2069,42 @@ a:hover {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+}
+
+.footer-qr {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.footer-qr__frame {
+  padding: 0.5rem;
+  background: var(--white);
+  border: 2px solid var(--stitch-light);
+  border-radius: var(--radius);
+}
+
+.footer-qr__frame img,
+.footer-qr__frame canvas {
+  display: block;
+  width: 120px;
+  height: 120px;
+}
+
+.footer-qr__label {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.footer-qr__label a {
+  color: var(--stitch-light);
+  font-weight: 600;
+}
+
+.footer-qr__label a:hover {
+  color: var(--white);
 }
 
 .site-footer__title {

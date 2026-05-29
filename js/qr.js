@@ -33,17 +33,49 @@
     script.src = "https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js";
     script.setAttribute("data-qr-lib", "true");
     script.onload = callback;
+    script.onerror = callback;
     document.head.appendChild(script);
   }
 
   function renderCanvas(canvas, url, size) {
     loadQrLibrary(function () {
+      if (!global.QRCode) {
+        return;
+      }
+
       global.QRCode.toCanvas(canvas, url, {
         width: size || QR_OPTIONS.width,
         margin: QR_OPTIONS.margin,
         color: QR_OPTIONS.color,
       });
     });
+  }
+
+  function showCanvas(img, canvas, url) {
+    if (!canvas) {
+      return;
+    }
+
+    var size = Number(canvas.dataset.size) || QR_OPTIONS.width;
+    canvas.classList.remove("is-hidden");
+    canvas.removeAttribute("aria-hidden");
+    renderCanvas(canvas, url, size);
+
+    if (img) {
+      img.classList.add("is-hidden");
+    }
+  }
+
+  function showImage(img, canvas) {
+    if (!img) {
+      return;
+    }
+
+    img.classList.remove("is-hidden");
+    if (canvas) {
+      canvas.classList.add("is-hidden");
+      canvas.setAttribute("aria-hidden", "true");
+    }
   }
 
   function initBlock(root) {
@@ -56,21 +88,56 @@
     var canvas = root.querySelector(".qr-block__canvas");
     var urlEl = root.querySelector(".qr-block__url");
     var copyBtn = root.querySelector(".qr-block__copy");
+    var staticSrc = "/assets/qr-code.png";
+    var remoteSrc =
+      "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" +
+      encodeURIComponent(url);
 
     if (urlEl) {
       urlEl.textContent = displayUrl(url);
     }
 
     if (img) {
-      img.addEventListener("error", function () {
-        img.classList.add("is-hidden");
-        if (canvas) {
-          canvas.classList.remove("is-hidden");
-          renderCanvas(canvas, url, Number(canvas.dataset.size) || QR_OPTIONS.width);
+      if (!img.getAttribute("src") || img.getAttribute("src").indexOf("assets/qr-code") !== -1) {
+        img.src = staticSrc;
+      }
+
+      img.loading = "eager";
+      img.decoding = "async";
+
+      img.addEventListener("load", function () {
+        if (img.naturalWidth > 0) {
+          showImage(img, canvas);
         }
       });
+
+      img.addEventListener("error", function () {
+        if (img.dataset.fallback !== "remote") {
+          img.dataset.fallback = "remote";
+          img.src = remoteSrc;
+          return;
+        }
+
+        showCanvas(img, canvas, url);
+      });
+
+      if (img.complete) {
+        if (img.naturalWidth > 0) {
+          showImage(img, canvas);
+        } else {
+          img.dispatchEvent(new Event("error"));
+        }
+      }
     } else if (canvas) {
-      renderCanvas(canvas, url, Number(canvas.dataset.size) || QR_OPTIONS.width);
+      showCanvas(null, canvas, url);
+    }
+
+    if (img && canvas && !img.complete) {
+      setTimeout(function () {
+        if (img.naturalWidth === 0 && canvas.classList.contains("is-hidden")) {
+          showCanvas(img, canvas, url);
+        }
+      }, 1500);
     }
 
     if (copyBtn) {
