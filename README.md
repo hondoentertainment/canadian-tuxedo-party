@@ -18,7 +18,7 @@ Visit `http://localhost:3000`. API routes require Vercel or `vercel dev` locally
 - Hero with poster, countdown, QR code, and post-party mode
 - **At the Party** hub — gallery, games, votes, and TV slideshow
 - Photo gallery with optional moderation
-- Best Dressed vote **by contestant number** (closes 10 PM party night, shows winner)
+- Best Dressed vote **by contestant number** (closes 8:45 PM party night, shows winner)
 - Printable contestant number tags
 - Next-party poll saved to Blob
 - **Host dashboard** — checklist, system status, live vote tally, quick links
@@ -38,7 +38,7 @@ npx vercel deploy --prod --yes
 |----------|---------|
 | `BLOB_READ_WRITE_TOKEN` | Auto-set when Vercel Blob is connected |
 | `GALLERY_ADMIN_CODE` | Host admin code — gallery moderation, poll results, host dashboard |
-| `VOTE_CLOSE_TIME` | Optional ISO datetime for vote cutoff (default: May 30, 2026 at 10:00 PM PT) |
+| `VOTE_CLOSE_TIME` | Optional ISO datetime for vote cutoff (default: May 30, 2026 at 8:45 PM PT) |
 | `VOTE_MAX_NUMBER` | Optional max contestant number (default: 99) |
 
 Set admin code:
