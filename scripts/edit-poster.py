@@ -1,35 +1,41 @@
 from PIL import Image, ImageDraw
-import subprocess
 
-root = r"c:\Users\kyle\OneDrive\Desktop\Canadian Tuxedo Party"
-path = root + r"\assets\poster.png"
+ROOT = r"c:\Users\kyle\OneDrive\Desktop\Canadian Tuxedo Party"
+SOURCE = ROOT + r"\Canadian Tuxedo Party.png"
+OUTPUT = ROOT + r"\assets\poster.png"
 
-subprocess.run(["git", "checkout", "HEAD", "--", "assets/poster.png"], cwd=root, check=True)
 
-im = Image.open(path).convert("RGB")
-w, h = im.size
+def main() -> None:
+    im = Image.open(SOURCE).convert("RGB")
+    width, height = im.size
 
-# Narrow left-edge wood tile — tile without horizontal stretch
-tile = im.crop((48, 462, 138, 498))
+    # Wood plank tile from the background (avoid stretching artifacts).
+    tile = im.crop((48, 462, 138, 498))
+    tile_w, tile_h = tile.size
 
-cover_top = 878
-cover_h = h - cover_top - 4
-tile_w, tile_h = tile.size
-wood = Image.new("RGB", (w, cover_h))
-for y in range(0, cover_h, tile_h):
-    for x in range(0, w, tile_w):
-        wood.paste(tile, (x, y))
+    cover_top = 878
+    cover_h = height - cover_top
+    wood = Image.new("RGB", (width, cover_h))
+    for y in range(0, cover_h, tile_h):
+        for x in range(0, width, tile_w):
+            wood.paste(tile, (x, y))
 
-result = im.copy()
-result.paste(wood, (0, cover_top))
+    result = im.copy()
+    result.paste(wood, (0, cover_top))
 
-left = Image.new("L", (w, h), 0)
-ImageDraw.Draw(left).rectangle([0, h - 545, 415, h], fill=255)
-right = Image.new("L", (w, h), 0)
-ImageDraw.Draw(right).rectangle([w - 415, h - 545, w, h], fill=255)
+    # Restore denim jacket (left) and jeans (right) corners.
+    left_mask = Image.new("L", (width, height), 0)
+    ImageDraw.Draw(left_mask).rectangle([0, height - 545, 415, height], fill=255)
 
-result.paste(im, (0, 0), left)
-result.paste(im, (0, 0), right)
+    right_mask = Image.new("L", (width, height), 0)
+    ImageDraw.Draw(right_mask).rectangle([width - 415, height - 545, width, height], fill=255)
 
-result.save(path, optimize=True)
-print("saved", path, result.size)
+    result.paste(im, (0, 0), left_mask)
+    result.paste(im, (0, 0), right_mask)
+
+    result.save(OUTPUT, optimize=True)
+    print("saved", OUTPUT, result.size)
+
+
+if __name__ == "__main__":
+    main()
