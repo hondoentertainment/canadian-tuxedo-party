@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#1e3354">
+  <title>Photo Slideshow | Canadian Tuxedo Party</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍁</text></svg>">
+</head>
+<body class="slideshow-page">
+  <main id="main" class="slideshow">
+    <div class="slideshow__stage" id="slideshow-stage">
+      <p class="slideshow__empty" id="slideshow-empty">Photos will appear here as guests upload to the gallery.</p>
+      <img class="slideshow__image is-hidden" id="slideshow-image" alt="">
+      <div class="slideshow__caption is-hidden" id="slideshow-caption"></div>
+    </div>
+    <div class="slideshow__hud no-print">
+      <p class="slideshow__brand">Canadian Tuxedo Party · Photo Slideshow</p>
+      <p class="slideshow__status" id="slideshow-status">Loading photos…</p>
+      <div class="slideshow__controls">
+        <button class="btn btn--secondary" type="button" id="slideshow-prev" aria-label="Previous photo">←</button>
+        <button class="btn btn--secondary" type="button" id="slideshow-pause" aria-pressed="false">Pause</button>
+        <button class="btn btn--secondary" type="button" id="slideshow-next" aria-label="Next photo">→</button>
+        <a class="btn btn--secondary" href="gallery.html">Gallery</a>
+        <a class="btn btn--secondary" href="host.html">Host</a>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/slideshow.js"></script>
+</body>
+</html>

@@ -1,6 +1,8 @@
 import { list, put } from "@vercel/blob";
 import { getVoteCloseTime, isVoteClosed } from "./_lib/admin.js";
 
+const DEFAULT_MAX_NUMBER = 99;
+
 function normalizeName(value) {
   return String(value || "")
     .trim()
@@ -8,22 +10,73 @@ function normalizeName(value) {
     .slice(0, 80);
 }
 
+function getMaxNumber() {
+  const parsed = Number.parseInt(process.env.VOTE_MAX_NUMBER || "", 10);
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : DEFAULT_MAX_NUMBER;
+}
+
+function parseContestantNumber(value) {
+  const number = Number.parseInt(String(value ?? "").trim(), 10);
+  if (!Number.isInteger(number)) {
+    return null;
+  }
+  return number;
+}
+
+function getVoteTarget(vote) {
+  if (vote.number != null) {
+    const number = parseContestantNumber(vote.number);
+    if (number != null) {
+      return { number };
+    }
+  }
+
+  const legacyNumber = parseContestantNumber(vote.nominee);
+  if (legacyNumber != null) {
+    return { number: legacyNumber };
+  }
+
+  const nominee = normalizeName(vote.nominee);
+  if (nominee) {
+    return { nominee };
+  }
+
+  return null;
+}
+
+function targetKey(target) {
+  return target.number != null ? "n:" + target.number : "l:" + target.nominee;
+}
+
+function compareTargets(a, b) {
+  if (a.number != null && b.number != null) {
+    return a.number - b.number;
+  }
+
+  return String(a.nominee || a.number).localeCompare(String(b.nominee || b.number));
+}
+
 function buildResults(valid) {
   const tally = {};
 
   valid.forEach(function (vote) {
-    const nominee = vote.nominee;
-    if (!nominee) {
+    const target = getVoteTarget(vote);
+    if (!target) {
       return;
     }
-    if (!tally[nominee]) {
-      tally[nominee] = { nominee, count: 0 };
+
+    const key = targetKey(target);
+    if (!tally[key]) {
+      tally[key] =
+        target.number != null
+          ? { number: target.number, count: 0 }
+          : { nominee: target.nominee, count: 0 };
     }
-    tally[nominee].count += 1;
+    tally[key].count += 1;
   });
 
   const results = Object.values(tally).sort(function (a, b) {
-    return b.count - a.count || a.nominee.localeCompare(b.nominee);
+    return b.count - a.count || compareTargets(a, b);
   });
 
   const winner = results.length > 0 ? results[0] : null;
@@ -78,21 +131,25 @@ export async function POST(request) {
   try {
     const body = await request.json();
     const voter = normalizeName(body.voter);
-    const nominee = normalizeName(body.nominee);
+    const number = parseContestantNumber(body.number);
+    const maxNumber = getMaxNumber();
 
     if (!voter) {
       return Response.json({ error: "Please enter your name." }, { status: 400 });
     }
 
-    if (!nominee) {
-      return Response.json({ error: "Please enter who you're voting for." }, { status: 400 });
+    if (number == null || number < 1 || number > maxNumber) {
+      return Response.json(
+        { error: "Enter a contestant number between 1 and " + maxNumber + "." },
+        { status: 400 }
+      );
     }
 
     const id = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
     const vote = {
       id,
       voter,
-      nominee,
+      number,
       votedAt: new Date().toISOString(),
     };
 
@@ -101,7 +158,7 @@ export async function POST(request) {
       contentType: "application/json",
     });
 
-    return Response.json({ ok: true, message: "Vote recorded — thanks!" });
+    return Response.json({ ok: true, message: "Vote recorded for #" + number + " — thanks!" });
   } catch (error) {
     console.error("Vote submission failed:", error);
     return Response.json({ error: "Could not record your vote. Please try again." }, { status: 500 });

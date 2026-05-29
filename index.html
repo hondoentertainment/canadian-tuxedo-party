@@ -23,6 +23,14 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍁</text></svg>">
 </head>
 <body>
+  <div class="install-banner is-hidden" id="install-banner" role="region" aria-label="Install app">
+    <p class="install-banner__text">Add the party site to your home screen for quick access tonight.</p>
+    <div class="install-banner__actions">
+      <button class="btn btn--primary" type="button" id="install-banner-btn">Install</button>
+      <button class="btn btn--secondary" type="button" id="install-banner-dismiss">Not now</button>
+    </div>
+  </div>
+
   <a class="skip-link" href="#main">Skip to content</a>
 
   <header class="site-header">
@@ -79,7 +87,7 @@
           <p class="hero__tagline" id="hero-tagline">Double denim. Good times. Woodlawn side entrance.</p>
 
           <div class="post-party is-hidden" id="post-party">
-            <p class="post-party__message">What a night! Share your photos and vote for best dressed.</p>
+            <p class="post-party__message">What a night! Share your photos and vote for best dressed by contestant number.</p>
             <div class="post-party__actions">
               <a class="btn btn--primary" href="gallery.html">View Gallery</a>
               <a class="btn btn--secondary" href="poll.html">Plan the Next One</a>
@@ -188,7 +196,12 @@
           <a class="party-night-card" href="vote.html">
             <span class="party-night-card__icon" aria-hidden="true">👑</span>
             <h3>Best Dressed Vote</h3>
-            <p>Cast your vote for the boldest Canadian tuxedo of the night.</p>
+            <p>Vote by contestant number for the boldest Canadian tuxedo of the night.</p>
+          </a>
+          <a class="party-night-card" href="slideshow.html">
+            <span class="party-night-card__icon" aria-hidden="true">📺</span>
+            <h3>Photo Slideshow</h3>
+            <p>Full-screen gallery rotation for the TV — updates as photos come in.</p>
           </a>
         </div>
       </div>
@@ -281,6 +294,7 @@
             </ul>
             <div class="qr-promo__actions">
               <button class="btn btn--secondary qr-block__copy" type="button">Copy party link</button>
+              <button class="btn btn--secondary" type="button" id="share-invite-btn">Copy invite text</button>
               <a class="btn btn--primary" href="qr.html">Print entrance sign</a>
             </div>
           </div>
@@ -325,7 +339,7 @@
           <details class="faq-item">
             <summary class="faq-item__question">Are there prizes for best dressed?</summary>
             <div class="faq-item__answer">
-              <p>Yes — there are prizes for the <strong>best dressed</strong>. <a href="vote.html">Cast your vote</a> before 10 PM. Bring your A-game denim.</p>
+              <p>Yes — there are prizes for the <strong>best dressed</strong>. <a href="vote.html">Vote by contestant number</a> before 10 PM. Bring your A-game denim.</p>
             </div>
           </details>
           <details class="faq-item">
@@ -368,6 +382,27 @@
 
   <script src="js/config.js"></script>
   <script src="js/qr.js"></script>
+  <script src="js/install-prompt.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    (function () {
+      var btn = document.getElementById("share-invite-btn");
+      if (!btn) return;
+      btn.addEventListener("click", function () {
+        var message =
+          window.CTP && window.CTP.SHARE_MESSAGE
+            ? window.CTP.SHARE_MESSAGE
+            : "Canadian Tuxedo Party: https://canadian-tuxedo-party.vercel.app";
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(message).then(function () {
+            btn.textContent = "Invite copied!";
+            setTimeout(function () {
+              btn.textContent = "Copy invite text";
+            }, 2000);
+          });
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

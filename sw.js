@@ -1,4 +1,4 @@
-const CACHE = "ctp-v2";
+const CACHE = "ctp-v3";
 const ASSETS = [
   "/",
   "/index.html",
@@ -6,12 +6,16 @@ const ASSETS = [
   "/js/config.js",
   "/js/main.js",
   "/js/qr.js",
+  "/js/install-prompt.js",
+  "/js/vote.js",
   "/assets/qr-code.png",
   "/gallery.html",
   "/vote.html",
   "/host.html",
   "/poll-results.html",
   "/qr.html",
+  "/numbers.html",
+  "/slideshow.html",
   "/admin.html",
   "/poll.html",
   "/ice-breaker.html",
@@ -29,7 +33,21 @@ self.addEventListener("install", function (event) {
 });
 
 self.addEventListener("activate", function (event) {
-  event.waitUntil(self.clients.claim());
+  event.waitUntil(
+    caches.keys().then(function (keys) {
+      return Promise.all(
+        keys
+          .filter(function (key) {
+            return key !== CACHE;
+          })
+          .map(function (key) {
+            return caches.delete(key);
+          })
+      );
+    }).then(function () {
+      return self.clients.claim();
+    })
+  );
 });
 
 self.addEventListener("fetch", function (event) {

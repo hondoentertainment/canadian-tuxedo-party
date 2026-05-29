@@ -3,6 +3,7 @@
 
   var VOTE_KEY = "ctp-best-dressed-vote";
   var closeTime = window.CTP ? window.CTP.VOTE_CLOSE_TIME : "2026-05-30T22:00:00-07:00";
+  var maxNumber = window.CTP && window.CTP.VOTE_MAX_NUMBER ? window.CTP.VOTE_MAX_NUMBER : 99;
 
   var toggle = document.querySelector(".nav__toggle");
   var menu = document.getElementById("nav-menu");
@@ -34,6 +35,18 @@
   var winnerName = document.getElementById("vote-winner-name");
   var winnerCount = document.getElementById("vote-winner-count");
   var voteOpenNote = document.getElementById("vote-open-note");
+  var numberInput = document.getElementById("vote-number");
+
+  if (numberInput) {
+    numberInput.max = String(maxNumber);
+  }
+
+  function formatContestant(item) {
+    if (item.number != null) {
+      return "#" + item.number;
+    }
+    return item.nominee || "Unknown";
+  }
 
   function setStatus(message, type) {
     if (!status) {
@@ -75,7 +88,7 @@
     }
 
     if (winnerEl && data.winner) {
-      winnerName.textContent = data.winner.nominee;
+      winnerName.textContent = formatContestant(data.winner);
       winnerCount.textContent =
         data.winner.count + (data.winner.count === 1 ? " vote" : " votes");
       winnerEl.classList.remove("is-hidden");
@@ -115,7 +128,7 @@
         '<span class="vote-result__rank">' +
         (index + 1) +
         '</span><span class="vote-result__name">' +
-        item.nominee +
+        formatContestant(item) +
         '</span><span class="vote-result__count">' +
         item.count +
         (item.count === 1 ? " vote" : " votes") +
@@ -164,10 +177,15 @@
       }
 
       var voter = form.voter.value.trim();
-      var nominee = form.nominee.value.trim();
+      var number = parseInt(form.number.value, 10);
 
-      if (!voter || !nominee) {
-        setStatus("Please enter your name and who you're voting for.", "error");
+      if (!voter) {
+        setStatus("Please enter your name.", "error");
+        return;
+      }
+
+      if (!Number.isInteger(number) || number < 1 || number > maxNumber) {
+        setStatus("Enter a contestant number between 1 and " + maxNumber + ".", "error");
         return;
       }
 
@@ -177,7 +195,7 @@
       fetch("/api/vote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ voter: voter, nominee: nominee }),
+        body: JSON.stringify({ voter: voter, number: number }),
       })
         .then(function (response) {
           return response.json().then(function (data) {

@@ -28,6 +28,11 @@
 
       <div class="host-dashboard is-hidden" id="host-dashboard">
         <section class="host-block">
+          <h2>System Status</h2>
+          <p class="host-system-status" id="host-system-status">Checking setup…</p>
+        </section>
+
+        <section class="host-block">
           <h2>Pre-Party Checklist</h2>
           <div class="host-checklist" id="host-checklist"></div>
         </section>
@@ -35,12 +40,15 @@
         <section class="host-block">
           <h2>Best Dressed Status</h2>
           <p class="host-vote-status" id="host-vote-status">Loading…</p>
+          <ol class="host-vote-leaderboard is-hidden" id="host-vote-leaderboard"></ol>
         </section>
 
         <section class="host-block">
           <h2>Quick Links</h2>
           <div class="host-links">
             <a class="btn btn--primary" href="qr.html" target="_blank" rel="noopener">Print QR Sign</a>
+            <a class="btn btn--primary" href="numbers.html" target="_blank" rel="noopener">Print Number Tags</a>
+            <a class="btn btn--secondary" href="slideshow.html" target="_blank" rel="noopener">Photo Slideshow (TV)</a>
             <a class="btn btn--secondary" href="https://name-that-canadian.vercel.app" target="_blank" rel="noopener">Trivia Full Screen</a>
             <a class="btn btn--secondary" href="admin.html">Gallery Admin</a>
             <a class="btn btn--secondary" href="poll-results.html">Poll Results</a>
@@ -50,11 +58,9 @@
         </section>
 
         <section class="host-block host-block--note">
-          <h2>Custom Domain</h2>
-          <p>
-            In Vercel → <strong>Settings → Domains</strong>, add your domain and point DNS as instructed.
-            Then update <code>SITE_URL</code> in <code>js/config.js</code> and redeploy.
-          </p>
+          <h2>Guest Invite Text</h2>
+          <p id="host-share-message"></p>
+          <button class="btn btn--secondary" type="button" id="host-copy-invite">Copy invite text</button>
         </section>
       </div>
 
@@ -62,6 +68,7 @@
     </div>
   </main>
 
+  <script src="js/config.js"></script>
   <script src="js/host.js"></script>
 </body>
 </html>

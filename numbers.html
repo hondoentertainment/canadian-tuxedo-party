@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#2d4a7a">
+  <title>Print Contestant Numbers | Canadian Tuxedo Party</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍁</text></svg>">
+</head>
+<body class="numbers-print-page">
+  <main id="main" class="numbers-print">
+    <div class="numbers-print__sheet" id="numbers-sheet">
+      <header class="numbers-print__header">
+        <p class="numbers-print__eyebrow">Canadian Tuxedo Party</p>
+        <h1 class="numbers-print__title">Best Dressed Numbers</h1>
+        <p class="numbers-print__subtitle">Wear your number — guests vote by contestant # before 10 PM</p>
+      </header>
+      <div class="numbers-print__grid" id="numbers-grid" aria-label="Contestant number tags"></div>
+    </div>
+
+    <div class="numbers-print__actions no-print">
+      <div class="form-row numbers-print__count">
+        <label for="numbers-count">How many tags?</label>
+        <input type="number" id="numbers-count" min="1" max="99" value="30">
+      </div>
+      <button class="btn btn--primary" type="button" id="numbers-regenerate">Update Tags</button>
+      <button class="btn btn--primary" type="button" onclick="window.print()">Print Tags</button>
+      <a class="btn btn--secondary" href="host.html">Host Dashboard</a>
+      <a class="btn btn--secondary" href="index.html">Back to Site</a>
+    </div>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/numbers.js"></script>
+</body>
+</html>
