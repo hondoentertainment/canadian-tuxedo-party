@@ -1,26 +1,6 @@
 (function () {
   "use strict";
 
-  const toggle = document.querySelector(".nav__toggle");
-  const menu = document.getElementById("nav-menu");
-
-  if (toggle && menu) {
-    toggle.addEventListener("click", function () {
-      const open = toggle.getAttribute("aria-expanded") === "true";
-      toggle.setAttribute("aria-expanded", String(!open));
-      toggle.setAttribute("aria-label", open ? "Open menu" : "Close menu");
-      menu.classList.toggle("is-open", !open);
-    });
-
-    menu.querySelectorAll("a").forEach(function (link) {
-      link.addEventListener("click", function () {
-        toggle.setAttribute("aria-expanded", "false");
-        toggle.setAttribute("aria-label", "Open menu");
-        menu.classList.remove("is-open");
-      });
-    });
-  }
-
   const form = document.getElementById("poll-form");
   const status = document.getElementById("poll-status");
   const submitBtn = document.getElementById("poll-submit");

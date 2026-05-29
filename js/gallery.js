@@ -6,27 +6,6 @@
   var STORE = "photos";
   var apiAvailable = null;
 
-  /* Mobile nav */
-  var toggle = document.querySelector(".nav__toggle");
-  var menu = document.getElementById("nav-menu");
-
-  if (toggle && menu) {
-    toggle.addEventListener("click", function () {
-      var open = toggle.getAttribute("aria-expanded") === "true";
-      toggle.setAttribute("aria-expanded", String(!open));
-      toggle.setAttribute("aria-label", open ? "Open menu" : "Close menu");
-      menu.classList.toggle("is-open", !open);
-    });
-
-    menu.querySelectorAll("a").forEach(function (link) {
-      link.addEventListener("click", function () {
-        toggle.setAttribute("aria-expanded", "false");
-        toggle.setAttribute("aria-label", "Open menu");
-        menu.classList.remove("is-open");
-      });
-    });
-  }
-
   /* Gallery elements */
   var form = document.getElementById("gallery-form");
   var status = document.getElementById("gallery-status");

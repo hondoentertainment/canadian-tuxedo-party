@@ -20,7 +20,8 @@
     <nav class="nav" aria-label="Main">
       <a class="nav__brand" href="index.html">
         <span class="nav__leaf" aria-hidden="true">🍁</span>
-        <span>Canadian Tuxedo Party</span>
+        <span class="nav__brand-full">Canadian Tuxedo Party</span>
+        <span class="nav__brand-short">Tuxedo Party</span>
       </a>
       <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="nav-menu" aria-label="Open menu">
         <span></span>
@@ -28,17 +29,31 @@
         <span></span>
       </button>
       <ul class="nav__menu" id="nav-menu">
-        <li><a href="index.html#details">Details</a></li>
         <li><a href="index.html#schedule">Schedule</a></li>
-        <li><a href="index.html#dress-code">Dress Code</a></li>
-        <li><a href="index.html#location">Location</a></li>
-        <li><a href="index.html#qr">QR Code</a></li>
-        <li><a href="index.html#faq">FAQ</a></li>
-        <li><a href="ice-breaker.html">Ice Breaker</a></li>
-        <li><a href="name-that-canadian.html" aria-current="page">Name That Canadian</a></li>
-        <li><a href="vote.html">Best Dressed</a></li>
-        <li><a href="poll.html">Poll</a></li>
         <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="vote.html">Vote</a></li>
+        <li class="nav__group">
+          <details class="nav__drop" open>
+            <summary>Games</summary>
+            <ul class="nav__drop-menu">
+              <li><a href="ice-breaker.html">Ice Breakers</a></li>
+              <li><a href="name-that-canadian.html" aria-current="page">Name That Canadian</a></li>
+            </ul>
+          </details>
+        </li>
+        <li class="nav__group">
+          <details class="nav__drop">
+            <summary>Info</summary>
+            <ul class="nav__drop-menu">
+              <li><a href="index.html#details">Details</a></li>
+              <li><a href="index.html#dress-code">Dress Code</a></li>
+              <li><a href="index.html#location">Location</a></li>
+              <li><a href="index.html#qr">QR Code</a></li>
+              <li><a href="index.html#faq">FAQ</a></li>
+              <li><a href="poll.html">Next Party Poll</a></li>
+            </ul>
+          </details>
+        </li>
       </ul>
     </nav>
   </header>
@@ -92,6 +107,7 @@
     </div>
   </footer>
 
+  <script src="js/nav.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

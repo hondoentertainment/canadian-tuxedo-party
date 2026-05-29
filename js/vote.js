@@ -5,26 +5,6 @@
   var closeTime = window.CTP ? window.CTP.VOTE_CLOSE_TIME : "2026-05-30T22:00:00-07:00";
   var maxNumber = window.CTP && window.CTP.VOTE_MAX_NUMBER ? window.CTP.VOTE_MAX_NUMBER : 99;
 
-  var toggle = document.querySelector(".nav__toggle");
-  var menu = document.getElementById("nav-menu");
-
-  if (toggle && menu) {
-    toggle.addEventListener("click", function () {
-      var open = toggle.getAttribute("aria-expanded") === "true";
-      toggle.setAttribute("aria-expanded", String(!open));
-      toggle.setAttribute("aria-label", open ? "Open menu" : "Close menu");
-      menu.classList.toggle("is-open", !open);
-    });
-
-    menu.querySelectorAll("a").forEach(function (link) {
-      link.addEventListener("click", function () {
-        toggle.setAttribute("aria-expanded", "false");
-        toggle.setAttribute("aria-label", "Open menu");
-        menu.classList.remove("is-open");
-      });
-    });
-  }
-
   var form = document.getElementById("vote-form");
   var status = document.getElementById("vote-status");
   var resultsEl = document.getElementById("vote-results");
