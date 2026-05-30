@@ -353,11 +353,6 @@
               <li>Name That Canadian trivia</li>
               <li>Best dressed vote &amp; directions</li>
             </ul>
-            <div class="qr-promo__actions">
-              <button class="btn btn--secondary qr-block__copy" type="button">Copy party link</button>
-              <button class="btn btn--secondary" type="button" id="share-invite-btn">Copy invite text</button>
-              <a class="btn btn--primary" href="qr.html">Print entrance sign</a>
-            </div>
           </div>
           <div class="qr-promo__code">
             <div class="qr-share__frame qr-block__frame">
@@ -459,25 +454,5 @@
   <script src="js/qr.js"></script>
   <script src="js/install-prompt.js"></script>
   <script src="js/main.js"></script>
-  <script>
-    (function () {
-      var btn = document.getElementById("share-invite-btn");
-      if (!btn) return;
-      btn.addEventListener("click", function () {
-        var message =
-          window.CTP && window.CTP.SHARE_MESSAGE
-            ? window.CTP.SHARE_MESSAGE
-            : "Canadian Tuxedo Party: https://canadian-tuxedo-party.vercel.app";
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(message).then(function () {
-            btn.textContent = "Invite copied!";
-            setTimeout(function () {
-              btn.textContent = "Copy invite text";
-            }, 2000);
-          });
-        }
-      });
-    })();
-  </script>
 </body>
 </html>
