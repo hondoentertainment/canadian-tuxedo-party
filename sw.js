@@ -6,7 +6,6 @@ const ASSETS = [
   "/js/config.js",
   "/js/main.js",
   "/js/qr.js",
-  "/js/install-prompt.js",
   "/js/vote.js",
   "/assets/qr-code.png",
   "/gallery.html",
