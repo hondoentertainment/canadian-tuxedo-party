@@ -73,7 +73,7 @@ def main() -> None:
     line2_font = fit_font(draw, [lines[1]], FONT, max_width, 50)
 
     center_x = poster.size[0] // 2
-    top_y = 860
+    top_y = 1010
     gap = 8
 
     line1_h = draw_line(draw, lines[0], line1_font, center_x, top_y)
