@@ -4,7 +4,7 @@
   global.CTP = {
     SITE_URL: "https://canadian-tuxedo-party.vercel.app",
     PARTY_DATE: "2026-05-30T18:30:00-07:00",
-    VOTE_CLOSE_TIME: "2026-05-30T20:45:00-07:00",
+    VOTE_CLOSE_TIME: "2026-05-30T21:00:00-07:00",
     VOTE_MAX_NUMBER: 99,
     VOTE_TAG_COUNT: 30,
     SHARE_MESSAGE:

@@ -2,7 +2,7 @@
   "use strict";
 
   var VOTE_KEY = "ctp-best-dressed-vote";
-  var closeTime = window.CTP ? window.CTP.VOTE_CLOSE_TIME : "2026-05-30T20:45:00-07:00";
+  var closeTime = window.CTP ? window.CTP.VOTE_CLOSE_TIME : "2026-05-30T21:00:00-07:00";
   var maxNumber = window.CTP && window.CTP.VOTE_MAX_NUMBER ? window.CTP.VOTE_MAX_NUMBER : 99;
 
   var form = document.getElementById("vote-form");
