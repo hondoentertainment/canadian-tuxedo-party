@@ -1,12 +1,16 @@
 (function () {
   "use strict";
 
+  var uploadConfig = window.CTP_UPLOAD || {
+    MAX_BYTES: 100 * 1024 * 1024,
+    MAX_LABEL: "100 MB",
+  };
+
   var DB_NAME = "ctp-gallery";
   var DB_VERSION = 1;
   var STORE = "photos";
   var apiAvailable = null;
 
-  /* Gallery elements */
   var form = document.getElementById("gallery-form");
   var status = document.getElementById("gallery-status");
   var fileInput = document.getElementById("gallery-file");
@@ -14,18 +18,20 @@
   var dropContent = document.getElementById("gallery-drop-content");
   var previewWrap = document.getElementById("gallery-preview");
   var previewImg = document.getElementById("gallery-preview-img");
+  var previewVideo = document.getElementById("gallery-preview-video");
   var clearBtn = document.getElementById("gallery-clear");
   var submitBtn = document.getElementById("gallery-submit");
   var grid = document.getElementById("gallery-grid");
   var emptyEl = document.getElementById("gallery-empty");
   var countEl = document.getElementById("gallery-count");
   var lightbox = document.getElementById("gallery-lightbox");
-  var lightboxImg = document.getElementById("lightbox-img");
+  var lightboxMedia = document.getElementById("lightbox-media");
   var lightboxCaption = document.getElementById("lightbox-caption");
   var lightboxClose = document.getElementById("lightbox-close");
 
   var selectedFile = null;
   var previewUrl = null;
+  var blobClientPromise = null;
 
   function setStatus(message, type) {
     if (!status) {
@@ -33,6 +39,36 @@
     }
     status.textContent = message;
     status.className = "form-note" + (type ? " form-note--" + type : "");
+  }
+
+  function isVideoFile(file) {
+    return file && String(file.type || "").indexOf("video/") === 0;
+  }
+
+  function isAllowedFile(file) {
+    if (!file) {
+      return false;
+    }
+    return file.type.indexOf("image/") === 0 || file.type.indexOf("video/") === 0;
+  }
+
+  function mediaTypeFor(photo) {
+    if (photo.mediaType === "video") {
+      return "video";
+    }
+    if (photo.contentType && photo.contentType.indexOf("video/") === 0) {
+      return "video";
+    }
+    return "image";
+  }
+
+  function loadBlobClient() {
+    if (!blobClientPromise) {
+      blobClientPromise = import(
+        "https://esm.sh/@vercel/blob@0.27.3/client?target=es2020"
+      );
+    }
+    return blobClientPromise;
   }
 
   function openDb() {
@@ -118,6 +154,36 @@
     });
   }
 
+  function createMediaElement(photo, forGrid) {
+    var isVideo = mediaTypeFor(photo) === "video";
+
+    if (isVideo) {
+      var video = document.createElement("video");
+      video.src = photo.url;
+      video.muted = true;
+      video.playsInline = true;
+      video.preload = "metadata";
+      if (forGrid) {
+        video.autoplay = true;
+        video.loop = true;
+      } else {
+        video.controls = true;
+        video.className = "gallery-lightbox__video";
+      }
+      video.alt = photo.caption || ("Video by " + photo.name);
+      return video;
+    }
+
+    var img = document.createElement("img");
+    img.src = photo.url;
+    img.alt = photo.caption || ("Photo by " + photo.name);
+    img.loading = forGrid ? "lazy" : "eager";
+    if (!forGrid) {
+      img.className = "gallery-lightbox__img";
+    }
+    return img;
+  }
+
   function renderGallery(photos) {
     if (!grid || !emptyEl || !countEl) {
       return;
@@ -127,30 +193,29 @@
 
     if (photos.length === 0) {
       emptyEl.classList.remove("is-hidden");
-      countEl.textContent = "No photos yet";
+      countEl.textContent = "No uploads yet";
       return;
     }
 
     emptyEl.classList.add("is-hidden");
     countEl.textContent =
-      photos.length === 1 ? "1 photo shared" : photos.length + " photos shared";
+      photos.length === 1 ? "1 upload shared" : photos.length + " uploads shared";
 
     photos.forEach(function (photo) {
       var item = document.createElement("button");
       item.type = "button";
       item.className = "gallery-item";
-      item.setAttribute("aria-label", "View photo by " + photo.name);
-
-      var img = document.createElement("img");
-      img.src = photo.url;
-      img.alt = photo.caption || ("Photo by " + photo.name);
-      img.loading = "lazy";
+      item.setAttribute(
+        "aria-label",
+        "View " + (mediaTypeFor(photo) === "video" ? "video" : "photo") + " by " + photo.name
+      );
 
       var meta = document.createElement("span");
       meta.className = "gallery-item__meta";
-      meta.textContent = photo.name;
+      meta.textContent =
+        (mediaTypeFor(photo) === "video" ? "Video · " : "") + photo.name;
 
-      item.appendChild(img);
+      item.appendChild(createMediaElement(photo, true));
       item.appendChild(meta);
 
       item.addEventListener("click", function () {
@@ -166,11 +231,12 @@
   }
 
   function openLightbox(photo) {
-    if (!lightbox || !lightboxImg || !lightboxCaption) {
+    if (!lightbox || !lightboxMedia || !lightboxCaption) {
       return;
     }
-    lightboxImg.src = photo.url;
-    lightboxImg.alt = photo.caption || ("Photo by " + photo.name);
+
+    lightboxMedia.innerHTML = "";
+    lightboxMedia.appendChild(createMediaElement(photo, false));
     lightboxCaption.textContent = photo.caption
       ? photo.name + " — " + photo.caption
       : photo.name;
@@ -187,7 +253,9 @@
       }
     });
     lightbox.addEventListener("cancel", function () {
-      lightboxImg.removeAttribute("src");
+      if (lightboxMedia) {
+        lightboxMedia.innerHTML = "";
+      }
     });
   }
 
@@ -196,6 +264,16 @@
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);
       previewUrl = null;
+    }
+    if (previewImg) {
+      previewImg.removeAttribute("src");
+      previewImg.classList.add("is-hidden");
+    }
+    if (previewVideo) {
+      previewVideo.pause();
+      previewVideo.removeAttribute("src");
+      previewVideo.load();
+      previewVideo.classList.add("is-hidden");
     }
     if (fileInput) {
       fileInput.value = "";
@@ -210,12 +288,12 @@
   }
 
   function setPreview(file) {
-    if (!file || !file.type.startsWith("image/")) {
-      setStatus("Please choose a valid image file.", "error");
+    if (!isAllowedFile(file)) {
+      setStatus("Please choose a photo or video file.", "error");
       return;
     }
-    if (file.size > 10 * 1024 * 1024) {
-      setStatus("Photo must be 10 MB or smaller.", "error");
+    if (file.size > uploadConfig.MAX_BYTES) {
+      setStatus("File must be " + uploadConfig.MAX_LABEL + " or smaller.", "error");
       return;
     }
 
@@ -224,8 +302,22 @@
       URL.revokeObjectURL(previewUrl);
     }
     previewUrl = URL.createObjectURL(file);
-    previewImg.src = previewUrl;
-    previewImg.alt = "Preview of selected photo";
+
+    if (isVideoFile(file) && previewVideo) {
+      previewVideo.src = previewUrl;
+      previewVideo.classList.remove("is-hidden");
+      if (previewImg) {
+        previewImg.classList.add("is-hidden");
+      }
+    } else if (previewImg) {
+      previewImg.src = previewUrl;
+      previewImg.alt = "Preview of selected photo";
+      previewImg.classList.remove("is-hidden");
+      if (previewVideo) {
+        previewVideo.classList.add("is-hidden");
+      }
+    }
+
     dropContent.classList.add("is-hidden");
     previewWrap.classList.remove("is-hidden");
     fileInput.style.pointerEvents = "none";
@@ -281,40 +373,60 @@
   }
 
   function uploadLocal(file, name, caption) {
+    if (isVideoFile(file) && file.size > 15 * 1024 * 1024) {
+      return Promise.reject(
+        new Error("Videos are too large to save locally. Use the live site to upload.")
+      );
+    }
+
     return readFileAsDataUrl(file).then(function (dataUrl) {
       var photo = {
         id: "local-" + Date.now() + "-" + Math.random().toString(36).slice(2, 9),
         url: dataUrl,
         name: name,
         caption: caption,
+        contentType: file.type,
+        mediaType: isVideoFile(file) ? "video" : "image",
         uploadedAt: new Date().toISOString(),
       };
       return idbPut(photo).then(function () {
         return {
           pending: false,
-          message: "Photo saved locally. Deploy to Vercel with Blob storage to share with everyone.",
+          message:
+            "Saved locally. Deploy to Vercel with Blob storage to share with everyone.",
         };
       });
     });
   }
 
   function uploadRemote(file, name, caption) {
-    var formData = new FormData();
-    formData.append("file", file);
-    formData.append("name", name);
-    formData.append("caption", caption);
-
-    return fetch("/api/upload", {
-      method: "POST",
-      body: formData,
-    }).then(function (response) {
-      return response.json().then(function (data) {
-        if (!response.ok) {
-          throw new Error(data.error || "Upload failed.");
-        }
-        return data;
+    return loadBlobClient()
+      .then(function (mod) {
+        return mod.upload(file.name, file, {
+          access: "public",
+          handleUploadUrl: "/api/upload",
+        });
+      })
+      .then(function (blob) {
+        return fetch("/api/gallery-register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            url: blob.url,
+            contentType: file.type,
+            name: name,
+            caption: caption,
+          }),
+        });
+      })
+      .then(function (response) {
+        return response.json().then(function (data) {
+          if (!response.ok) {
+            throw new Error(data.error || "Upload failed.");
+          }
+          return data;
+        });
       });
-    });
   }
 
   if (form) {
@@ -322,15 +434,16 @@
       event.preventDefault();
 
       if (!selectedFile) {
-        setStatus("Please choose a photo to upload.", "error");
+        setStatus("Please choose a photo or video to upload.", "error");
         return;
       }
 
       var name = form.name.value.trim() || "Anonymous";
       var caption = form.caption.value.trim();
+      var uploadLabel = isVideoFile(selectedFile) ? "video" : "photo";
 
       submitBtn.disabled = true;
-      setStatus("Uploading your photo…");
+      setStatus("Uploading your " + uploadLabel + "…");
 
       checkApi()
         .then(function (hasApi) {
@@ -342,13 +455,7 @@
         .then(function (data) {
           clearPreview();
           form.caption.value = "";
-          setStatus(
-            data.message ||
-              (apiAvailable
-                ? "Photo added to the gallery!"
-                : "Photo saved locally. Deploy to Vercel with Blob storage to share with everyone."),
-            "success"
-          );
+          setStatus(data.message || "Upload complete!", "success");
           if (!data.pending) {
             return refreshGallery();
           }

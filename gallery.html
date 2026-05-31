@@ -69,7 +69,7 @@
           </p>
           <h1 class="poll-hero__title">Photo Gallery</h1>
           <p class="poll-hero__lead">
-            Snap your best denim looks and party moments — upload a photo and browse what everyone shared.
+            Snap your best denim looks and party moments — upload photos or videos and browse what everyone shared.
             Photos may be reviewed before they appear.
           </p>
           <div class="embed-toolbar">
@@ -82,7 +82,7 @@
     <section class="section section--gallery">
       <div class="container">
         <form class="gallery-upload poll-form" id="gallery-form" novalidate>
-          <h2 class="gallery-upload__title">Submit a Photo</h2>
+          <h2 class="gallery-upload__title">Submit a Photo or Video</h2>
 
           <div class="form-row">
             <label for="gallery-name">Your name</label>
@@ -95,23 +95,24 @@
           </div>
 
           <div class="form-row">
-            <span class="gallery-upload__label" id="gallery-file-label">Photo</span>
+            <span class="gallery-upload__label" id="gallery-file-label">Photo or video</span>
             <div class="gallery-drop" id="gallery-drop">
               <input
                 class="gallery-drop__input"
                 type="file"
                 id="gallery-file"
                 name="file"
-                accept="image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif"
+                accept="image/jpeg,image/png,image/webp,image/gif,image/heic,image/heif,video/mp4,video/quicktime,video/webm,video/x-msvideo"
                 aria-labelledby="gallery-file-label"
               >
               <div class="gallery-drop__content" id="gallery-drop-content">
                 <span class="gallery-drop__icon" aria-hidden="true">📷</span>
-                <p class="gallery-drop__text">Drag a photo here or <span>browse files</span></p>
-                <p class="gallery-drop__hint">JPEG, PNG, WebP, or GIF · up to 10 MB</p>
+                <p class="gallery-drop__text">Drag a photo or video here or <span>browse files</span></p>
+                <p class="gallery-drop__hint">Photos or videos · up to 100 MB</p>
               </div>
               <div class="gallery-drop__preview is-hidden" id="gallery-preview">
-                <img id="gallery-preview-img" alt="">
+                <img id="gallery-preview-img" class="is-hidden" alt="">
+                <video id="gallery-preview-video" class="gallery-drop__preview-video is-hidden" controls muted playsinline></video>
                 <button class="gallery-drop__clear" type="button" id="gallery-clear">Remove</button>
               </div>
             </div>
@@ -124,7 +125,7 @@
 
         <div class="gallery-section">
           <header class="gallery-section__header">
-            <h2>Party Photos</h2>
+            <h2>Party Photos &amp; Videos</h2>
             <p id="gallery-count">Loading gallery…</p>
           </header>
           <div class="gallery-grid" id="gallery-grid" aria-live="polite"></div>
@@ -137,7 +138,7 @@
   <dialog class="gallery-lightbox" id="gallery-lightbox" aria-labelledby="lightbox-caption">
     <button class="gallery-lightbox__close" type="button" id="lightbox-close" aria-label="Close photo">×</button>
     <figure class="gallery-lightbox__figure">
-      <img class="gallery-lightbox__img" id="lightbox-img" alt="">
+      <div class="gallery-lightbox__media" id="lightbox-media"></div>
       <figcaption class="gallery-lightbox__caption" id="lightbox-caption"></figcaption>
     </figure>
   </dialog>
@@ -151,6 +152,7 @@
   </footer>
 
   <script src="js/nav.js"></script>
+  <script src="js/upload-config.js"></script>
   <script src="js/gallery.js"></script>
 </body>
 </html>

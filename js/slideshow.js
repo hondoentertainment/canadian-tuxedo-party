@@ -2,10 +2,12 @@
   "use strict";
 
   var INTERVAL_MS = 8000;
+  var VIDEO_INTERVAL_MS = 20000;
   var REFRESH_MS = 30000;
 
   var stage = document.getElementById("slideshow-stage");
   var image = document.getElementById("slideshow-image");
+  var video = document.getElementById("slideshow-video");
   var caption = document.getElementById("slideshow-caption");
   var empty = document.getElementById("slideshow-empty");
   var status = document.getElementById("slideshow-status");
@@ -18,19 +20,40 @@
   var timer = null;
   var paused = false;
 
+  function mediaTypeFor(item) {
+    if (item.mediaType === "video") {
+      return "video";
+    }
+    if (item.contentType && item.contentType.indexOf("video/") === 0) {
+      return "video";
+    }
+    return "image";
+  }
+
   function setStatus(message) {
     if (status) {
       status.textContent = message;
     }
   }
 
+  function hideMedia() {
+    if (image) {
+      image.classList.add("is-hidden");
+      image.removeAttribute("src");
+    }
+    if (video) {
+      video.pause();
+      video.classList.add("is-hidden");
+      video.removeAttribute("src");
+      video.load();
+    }
+  }
+
   function showCurrent() {
     if (!photos.length) {
+      hideMedia();
       if (empty) {
         empty.classList.remove("is-hidden");
-      }
-      if (image) {
-        image.classList.add("is-hidden");
       }
       if (caption) {
         caption.classList.add("is-hidden");
@@ -43,15 +66,25 @@
       empty.classList.add("is-hidden");
     }
 
-    var photo = photos[index];
-    if (image) {
-      image.src = photo.url;
-      image.alt = photo.caption || ("Photo by " + (photo.name || "guest"));
+    var item = photos[index];
+    var isVideo = mediaTypeFor(item) === "video";
+    hideMedia();
+
+    if (isVideo && video) {
+      video.src = item.url;
+      video.classList.remove("is-hidden");
+      video.play().catch(function () {
+        /* autoplay may be blocked until user interaction */
+      });
+    } else if (image) {
+      image.src = item.url;
+      image.alt = item.caption || ("Photo by " + (item.name || "guest"));
       image.classList.remove("is-hidden");
     }
 
     if (caption) {
-      var text = photo.caption || (photo.name ? "Photo by " + photo.name : "");
+      var prefix = isVideo ? "Video" : "Photo";
+      var text = item.caption || (item.name ? prefix + " by " + item.name : "");
       if (text) {
         caption.textContent = text;
         caption.classList.remove("is-hidden");
@@ -66,6 +99,13 @@
         photos.length +
         (paused ? " · paused" : " · auto-advancing")
     );
+  }
+
+  function currentInterval() {
+    if (!photos.length) {
+      return INTERVAL_MS;
+    }
+    return mediaTypeFor(photos[index]) === "video" ? VIDEO_INTERVAL_MS : INTERVAL_MS;
   }
 
   function nextPhoto() {
@@ -89,7 +129,7 @@
       clearInterval(timer);
     }
     if (!paused && photos.length > 1) {
-      timer = setInterval(nextPhoto, INTERVAL_MS);
+      timer = setInterval(nextPhoto, currentInterval());
     }
   }
 

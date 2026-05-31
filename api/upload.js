@@ -1,74 +1,27 @@
-import { put } from "@vercel/blob";
-import { isModerationEnabled } from "./_lib/admin.js";
-
-const MAX_SIZE = 10 * 1024 * 1024;
-const ALLOWED = new Set([
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "image/gif",
-  "image/heic",
-  "image/heif",
-]);
+import { handleUpload } from "@vercel/blob/client";
+import {
+  ALLOWED_CONTENT_TYPES,
+  MAX_UPLOAD_BYTES,
+} from "./_lib/upload-config.js";
 
 export async function POST(request) {
   try {
-    const formData = await request.formData();
-    const file = formData.get("file");
-    const name = String(formData.get("name") || "").trim() || "Anonymous";
-    const caption = String(formData.get("caption") || "").trim();
-
-    if (!file || typeof file === "string") {
-      return Response.json({ error: "Please choose a photo to upload." }, { status: 400 });
-    }
-
-    if (!ALLOWED.has(file.type)) {
-      return Response.json(
-        { error: "Please upload a JPEG, PNG, WebP, or GIF image." },
-        { status: 400 }
-      );
-    }
-
-    if (file.size > MAX_SIZE) {
-      return Response.json({ error: "Photo must be 10 MB or smaller." }, { status: 400 });
-    }
-
-    const id = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
-    const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
-    const imagePath = `gallery/${id}.${ext}`;
-    const moderated = isModerationEnabled();
-
-    const imageBlob = await put(imagePath, file, {
-      access: "public",
-      contentType: file.type,
+    const body = await request.json();
+    const jsonResponse = await handleUpload({
+      body,
+      request,
+      onBeforeGenerateToken: async () => ({
+        allowedContentTypes: ALLOWED_CONTENT_TYPES,
+        maximumSizeInBytes: MAX_UPLOAD_BYTES,
+      }),
     });
 
-    const metadata = {
-      id,
-      url: imageBlob.url,
-      name,
-      caption,
-      uploadedAt: new Date().toISOString(),
-      status: moderated ? "pending" : "approved",
-    };
-
-    await put(`gallery/${id}.json`, JSON.stringify(metadata), {
-      access: "public",
-      contentType: "application/json",
-    });
-
-    return Response.json({
-      ...metadata,
-      pending: moderated,
-      message: moderated
-        ? "Photo submitted for review — it will appear once approved."
-        : "Photo added to the gallery!",
-    });
+    return Response.json(jsonResponse);
   } catch (error) {
-    console.error("Upload failed:", error);
+    console.error("Upload token failed:", error);
     return Response.json(
-      { error: "Upload failed. Make sure Vercel Blob storage is connected." },
-      { status: 500 }
+      { error: error.message || "Could not start upload." },
+      { status: 400 }
     );
   }
 }

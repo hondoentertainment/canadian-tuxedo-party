@@ -51,14 +51,23 @@
     pending.forEach(function (photo) {
       var card = document.createElement("article");
       card.className = "admin-card";
+      var isVideo =
+        photo.mediaType === "video" ||
+        (photo.contentType && photo.contentType.indexOf("video/") === 0);
+      var media = isVideo
+        ? '<video src="' +
+          photo.url +
+          '" controls muted playsinline preload="metadata"></video>'
+        : '<img src="' +
+          photo.url +
+          '" alt="Pending upload by ' +
+          photo.name +
+          '">';
       card.innerHTML =
-        '<img src="' +
-        photo.url +
-        '" alt="Pending photo by ' +
-        photo.name +
-        '">' +
+        media +
         '<div class="admin-card__body">' +
         "<h3>" +
+        (isVideo ? "Video · " : "") +
         photo.name +
         "</h3>" +
         (photo.caption ? "<p>" + photo.caption + "</p>" : "") +
