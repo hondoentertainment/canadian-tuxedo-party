@@ -47,7 +47,7 @@ npx vercel deploy --prod --yes
 | `VOTE_CLOSE_TIME` | Optional ISO datetime for vote cutoff (default: May 30, 2026 at 9:00 PM PT) |
 | `VOTE_MAX_NUMBER` | Optional max contestant number (default: 99) |
 
-Gallery uploads support photos and videos up to **100 MB** via direct-to-Blob client uploads.
+Gallery uploads support photos and videos up to **5 GB** via direct-to-Blob client uploads (multipart for files over 100 MB).
 
 Set admin code:
 

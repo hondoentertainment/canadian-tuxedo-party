@@ -2,8 +2,10 @@
   "use strict";
 
   var uploadConfig = window.CTP_UPLOAD || {
-    MAX_BYTES: 100 * 1024 * 1024,
-    MAX_LABEL: "100 MB",
+    MAX_BYTES: 5 * 1024 * 1024 * 1024,
+    MAX_LABEL: "5 GB",
+    MULTIPART_BYTES: 100 * 1024 * 1024,
+    COMPRESS_SKIP_BYTES: 50 * 1024 * 1024,
   };
 
   var DB_NAME = "ctp-gallery";
@@ -34,7 +36,8 @@
   var blobClientPromise = null;
   var preparedFilePromise = null;
   var SERVER_MAX_BYTES = 4 * 1024 * 1024;
-  var COMPRESS_SKIP_BYTES = 400 * 1024;
+  var COMPRESS_SKIP_BYTES = uploadConfig.COMPRESS_SKIP_BYTES || 400 * 1024;
+  var MULTIPART_BYTES = uploadConfig.MULTIPART_BYTES || 100 * 1024 * 1024;
   var COMPRESS_MAX_DIM = 2048;
   var BLOB_CLIENT_URL =
     "https://esm.sh/@vercel/blob@0.27.3/client?target=es2020";
@@ -583,7 +586,7 @@
           access: "public",
           handleUploadUrl: "/api/upload",
           contentType: fileContentType(file) || undefined,
-          multipart: file.size > 15 * 1024 * 1024,
+          multipart: file.size > MULTIPART_BYTES,
         });
       })
       .then(function (blob) {
@@ -629,6 +632,8 @@
             .then(function (prepared) {
               if (prepared !== selectedFile && !isVideoFile(prepared)) {
                 setStatus("Uploading optimized " + uploadLabel + "…");
+              } else if (prepared.size > MULTIPART_BYTES) {
+                setStatus("Uploading large " + uploadLabel + " — this may take a while…");
               } else {
                 setStatus("Uploading your " + uploadLabel + "…");
               }

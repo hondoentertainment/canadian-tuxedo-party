@@ -1,4 +1,6 @@
-export const MAX_UPLOAD_BYTES = 100 * 1024 * 1024;
+export const MAX_UPLOAD_BYTES = 5 * 1024 * 1024 * 1024;
+
+export const MULTIPART_THRESHOLD_BYTES = 100 * 1024 * 1024;
 
 export const ALLOWED_CONTENT_TYPES = [
   "image/jpeg",
@@ -22,7 +24,7 @@ export function mediaTypeFor(contentType) {
 }
 
 export function maxUploadLabel() {
-  return "100 MB";
+  return "5 GB";
 }
 
 export function allowedTypesLabel() {
