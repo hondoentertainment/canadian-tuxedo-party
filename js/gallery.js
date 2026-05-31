@@ -530,4 +530,5 @@
   }
 
   refreshGallery();
+  setInterval(refreshGallery, 30000);
 })();
