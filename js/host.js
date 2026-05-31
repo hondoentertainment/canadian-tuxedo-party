@@ -16,14 +16,13 @@
   var copyInviteBtn = document.getElementById("host-copy-invite");
 
   var defaultItems = [
-    "Set GALLERY_ADMIN_CODE in Vercel (gallery moderation + host tools)",
+    "Set GALLERY_ADMIN_CODE in Vercel for host tools (poll results)",
     "Print QR sign and post at Woodlawn entrance",
     "Print contestant number tags and hand out at the door",
     "Test gallery upload on phone over cellular",
     "Test Best Dressed vote by contestant number on phone",
     "Open photo slideshow on the TV",
     "Bookmark Name That Canadian full-screen for TV",
-    "Open gallery admin during the party",
   ];
 
   function setStatus(message, type) {
@@ -119,11 +118,7 @@
       })
       .then(function (data) {
         var parts = [];
-        parts.push(
-          data.moderationEnabled
-            ? "Gallery moderation is enabled."
-            : "Gallery moderation is OFF — set GALLERY_ADMIN_CODE in Vercel."
-        );
+        parts.push("Gallery uploads publish instantly.");
         parts.push(
           data.voteClosed
             ? "Voting is closed."

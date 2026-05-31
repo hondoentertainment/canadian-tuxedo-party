@@ -1,5 +1,5 @@
 export function isModerationEnabled() {
-  return Boolean(process.env.GALLERY_ADMIN_CODE);
+  return false;
 }
 
 export function verifyAdminCode(request) {

@@ -16,18 +16,18 @@ export async function GET() {
     });
 
     const photos = await Promise.all(metaBlobs.map(loadMetadata));
-    const approved = photos.filter(function (photo) {
+    const visible = photos.filter(function (photo) {
       if (!photo) {
         return false;
       }
-      return !photo.status || photo.status === "approved";
+      return photo.status !== "rejected";
     });
 
-    approved.sort(function (a, b) {
+    visible.sort(function (a, b) {
       return new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime();
     });
 
-    return Response.json({ photos: approved });
+    return Response.json({ photos: visible });
   } catch (error) {
     console.error("Failed to list photos:", error);
     return Response.json({ photos: [] });
