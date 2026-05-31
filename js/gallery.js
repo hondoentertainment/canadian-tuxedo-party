@@ -32,6 +32,21 @@
   var selectedFile = null;
   var previewUrl = null;
   var blobClientPromise = null;
+  var SERVER_MAX_BYTES = 4 * 1024 * 1024;
+
+  var EXT_TO_TYPE = {
+    jpg: "image/jpeg",
+    jpeg: "image/jpeg",
+    png: "image/png",
+    webp: "image/webp",
+    gif: "image/gif",
+    heic: "image/heic",
+    heif: "image/heif",
+    mp4: "video/mp4",
+    mov: "video/quicktime",
+    webm: "video/webm",
+    avi: "video/x-msvideo",
+  };
 
   function setStatus(message, type) {
     if (!status) {
@@ -41,15 +56,28 @@
     status.className = "form-note" + (type ? " form-note--" + type : "");
   }
 
+  function fileContentType(file) {
+    if (!file) {
+      return "";
+    }
+    var fromType = String(file.type || "").toLowerCase();
+    if (fromType) {
+      return fromType;
+    }
+    var ext = String(file.name || "")
+      .split(".")
+      .pop()
+      .toLowerCase();
+    return EXT_TO_TYPE[ext] || "";
+  }
+
   function isVideoFile(file) {
-    return file && String(file.type || "").indexOf("video/") === 0;
+    return fileContentType(file).indexOf("video/") === 0;
   }
 
   function isAllowedFile(file) {
-    if (!file) {
-      return false;
-    }
-    return file.type.indexOf("image/") === 0 || file.type.indexOf("video/") === 0;
+    var type = fileContentType(file);
+    return type.indexOf("image/") === 0 || type.indexOf("video/") === 0;
   }
 
   function mediaTypeFor(photo) {
@@ -385,7 +413,7 @@
         url: dataUrl,
         name: name,
         caption: caption,
-        contentType: file.type,
+        contentType: fileContentType(file),
         mediaType: isVideoFile(file) ? "video" : "image",
         uploadedAt: new Date().toISOString(),
       };
@@ -399,34 +427,66 @@
     });
   }
 
-  function uploadRemote(file, name, caption) {
+  function parseUploadResponse(response) {
+    return response.json().then(function (data) {
+      if (!response.ok) {
+        var error = new Error(data.error || "Upload failed.");
+        error.code = data.code;
+        throw error;
+      }
+      return data;
+    });
+  }
+
+  function uploadViaServer(file, name, caption) {
+    var formData = new FormData();
+    formData.append("file", file, file.name || "upload");
+    formData.append("name", name);
+    formData.append("caption", caption);
+
+    return fetch("/api/upload", {
+      method: "POST",
+      body: formData,
+    }).then(parseUploadResponse);
+  }
+
+  function registerGalleryUpload(blob, file, name, caption) {
+    return fetch("/api/gallery-register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        url: blob.url,
+        contentType: fileContentType(file),
+        name: name,
+        caption: caption,
+      }),
+    }).then(parseUploadResponse);
+  }
+
+  function uploadViaClient(file, name, caption) {
     return loadBlobClient()
       .then(function (mod) {
-        return mod.upload(file.name, file, {
+        return mod.upload(file.name || "upload", file, {
           access: "public",
           handleUploadUrl: "/api/upload",
+          contentType: fileContentType(file) || undefined,
         });
       })
       .then(function (blob) {
-        return fetch("/api/gallery-register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            url: blob.url,
-            contentType: file.type,
-            name: name,
-            caption: caption,
-          }),
-        });
-      })
-      .then(function (response) {
-        return response.json().then(function (data) {
-          if (!response.ok) {
-            throw new Error(data.error || "Upload failed.");
-          }
-          return data;
-        });
+        return registerGalleryUpload(blob, file, name, caption);
       });
+  }
+
+  function uploadRemote(file, name, caption) {
+    if (file.size <= SERVER_MAX_BYTES) {
+      return uploadViaServer(file, name, caption).catch(function (error) {
+        if (error.code === "USE_CLIENT_UPLOAD") {
+          return uploadViaClient(file, name, caption);
+        }
+        throw error;
+      });
+    }
+    return uploadViaClient(file, name, caption);
   }
 
   if (form) {
