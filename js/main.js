@@ -1,7 +1,9 @@
 (function () {
   "use strict";
 
-  const PARTY_DATE = new Date(window.CTP ? window.CTP.PARTY_DATE : "2026-05-30T18:30:00-07:00");
+  const config = window.CTP || {};
+  const PARTY_DATE = new Date(config.PARTY_DATE || "2026-05-30T18:30:00-07:00");
+  const PARTY_END = new Date(config.PARTY_END || "2026-05-30T22:00:00-07:00");
 
   const daysEl = document.getElementById("days");
   const hoursEl = document.getElementById("hours");
@@ -18,7 +20,12 @@
   }
 
   function isPostParty() {
-    return Date.now() >= PARTY_DATE.getTime();
+    return Date.now() >= PARTY_END.getTime();
+  }
+
+  function isPartyLive() {
+    const now = Date.now();
+    return now >= PARTY_DATE.getTime() && now < PARTY_END.getTime();
   }
 
   function applyPostPartyMode() {
@@ -52,13 +59,45 @@
     }
   }
 
+  function applyLivePartyMode() {
+    if (!isPartyLive()) {
+      return;
+    }
+
+    document.body.classList.add("is-party-live");
+
+    if (heroEyebrow) {
+      heroEyebrow.innerHTML =
+        '<span class="star" aria-hidden="true">★</span> Party Night <span class="star" aria-hidden="true">★</span>';
+    }
+
+    if (heroTagline) {
+      heroTagline.textContent = "Double denim. Good times — scan the QR for photos, games, and votes.";
+    }
+
+    if (countdownEl) {
+      countdownEl.classList.add("is-hidden");
+    }
+
+    if (postPartyEl) {
+      postPartyEl.classList.add("is-hidden");
+    }
+  }
+
   function updateCountdown() {
     if (!daysEl || !hoursEl || !minutesEl || !secondsEl) {
+      applyPostPartyMode();
+      applyLivePartyMode();
       return;
     }
 
     if (isPostParty()) {
       applyPostPartyMode();
+      return;
+    }
+
+    if (isPartyLive()) {
+      applyLivePartyMode();
       return;
     }
 
@@ -68,7 +107,7 @@
       hoursEl.textContent = "00";
       minutesEl.textContent = "00";
       secondsEl.textContent = "00";
-      applyPostPartyMode();
+      applyLivePartyMode();
       return;
     }
 
@@ -87,6 +126,7 @@
   updateCountdown();
   setInterval(updateCountdown, 1000);
   applyPostPartyMode();
+  applyLivePartyMode();
 
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", function () {

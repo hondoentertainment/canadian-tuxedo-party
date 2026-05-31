@@ -9,11 +9,11 @@
   <meta property="og:title" content="Canadian Tuxedo Party | May 30, 2026">
   <meta property="og:description" content="Double denim. Good times. Games, photo gallery, and party info — enter on the Woodlawn side.">
   <meta property="og:url" content="https://canadian-tuxedo-party.vercel.app/">
-  <meta property="og:image" content="https://canadian-tuxedo-party.vercel.app/assets/poster.png">
+  <meta property="og:image" content="https://canadian-tuxedo-party.vercel.app/assets/poster-og.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Canadian Tuxedo Party | May 30, 2026">
   <meta name="twitter:description" content="Double denim. Good times. Games, photo gallery, and party info.">
-  <meta name="twitter:image" content="https://canadian-tuxedo-party.vercel.app/assets/poster.png">
+  <meta name="twitter:image" content="https://canadian-tuxedo-party.vercel.app/assets/poster-og.jpg">
   <title>Canadian Tuxedo Party | May 30, 2026</title>
   <link rel="manifest" href="manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -71,14 +71,17 @@
     <section class="hero" id="top">
       <div class="hero__inner">
         <div class="hero__poster-wrap">
-          <img
-            class="hero__poster"
-            src="/assets/poster.png"
-            alt="Canadian Tuxedo Party poster — double denim, good times"
-            width="1086"
-            height="1448"
-            fetchpriority="high"
-          >
+          <picture>
+            <source srcset="/assets/poster.webp" type="image/webp">
+            <img
+              class="hero__poster"
+              src="/assets/poster-hero.jpg"
+              alt="Canadian Tuxedo Party poster — double denim, good times"
+              width="1086"
+              height="1448"
+              fetchpriority="high"
+            >
+          </picture>
         </div>
         <div class="hero__content">
           <p class="hero__eyebrow" id="hero-eyebrow">
@@ -205,13 +208,18 @@
               </tr>
               <tr>
                 <td>Saturday</td>
+                <td><time datetime="2026-05-30T20:58:00-07:00">8:58 PM</time></td>
+                <td>Sunset</td>
+              </tr>
+              <tr>
+                <td>Saturday</td>
                 <td><time datetime="2026-05-30T21:00:00-07:00">9:00 PM</time></td>
                 <td><a href="vote.html">Voting Closes</a> <span class="schedule-table__note">(best dressed)</span></td>
               </tr>
               <tr>
                 <td>Saturday</td>
-                <td><time datetime="2026-05-30T20:58:00-07:00">8:58 PM</time></td>
-                <td>Sunset</td>
+                <td><time datetime="2026-05-30T21:05:00-07:00">9:05 PM</time></td>
+                <td><a href="vote.html">Best Dressed Winner</a></td>
               </tr>
               <tr class="schedule-table__end">
                 <td>Saturday</td>
@@ -382,6 +390,15 @@
             <summary class="faq-item__question">Where are the bathrooms?</summary>
             <div class="faq-item__answer">
               <p>Bathrooms are located in the <strong>lobby</strong> and in <strong>apartment 327</strong>.</p>
+            </div>
+          </details>
+          <details class="faq-item">
+            <summary class="faq-item__question">How do I vote for best dressed?</summary>
+            <div class="faq-item__answer">
+              <p>
+                Hosts hand out numbered tags at the door. Enter that contestant number on the
+                <a href="vote.html">Best Dressed Vote</a> page before 9 PM.
+              </p>
             </div>
           </details>
           <details class="faq-item">

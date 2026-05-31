@@ -8,10 +8,16 @@
   "theme_color": "#2d4a7a",
   "icons": [
     {
-      "src": "/assets/poster.png",
+      "src": "/assets/app-icon.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "/assets/app-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

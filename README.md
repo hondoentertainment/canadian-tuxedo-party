@@ -13,6 +13,12 @@ npx serve .
 
 Visit `http://localhost:3000`. API routes require Vercel or `vercel dev` locally.
 
+Smoke-test production:
+
+```bash
+python scripts/smoke-test.py
+```
+
 ## What's included
 
 - Hero with poster, countdown, QR code, and post-party mode
@@ -23,7 +29,7 @@ Visit `http://localhost:3000`. API routes require Vercel or `vercel dev` locally
 - Next-party poll saved to Blob
 - **Host dashboard** — checklist, system status, live vote tally, quick links
 - **Poll results dashboard** — date rankings and feedback
-- PWA support, install prompt, and printable QR sign
+- PWA support, offline caching, and printable QR sign
 
 ## Deploy
 
@@ -65,7 +71,7 @@ npx vercel env add GALLERY_ADMIN_CODE production
 3. Print number tags from [numbers.html](https://canadian-tuxedo-party.vercel.app/numbers.html) → hand out at the door
 4. Test gallery upload + vote by number on a phone over **cellular**
 5. Open [slideshow.html](https://canadian-tuxedo-party.vercel.app/slideshow.html) on the TV
-6. Open [Name That Canadian](https://name-that-canadian.vercel.app) full-screen on the TV
+6. Open [name-that-canadian.html](https://canadian-tuxedo-party.vercel.app/name-that-canadian.html) full-screen on the TV
 7. Use [host.html](https://canadian-tuxedo-party.vercel.app/host.html) during the party
 
 ## Custom domain
@@ -76,7 +82,8 @@ npx vercel env add GALLERY_ADMIN_CODE production
 
 ## Customize
 
-- Party date: `js/config.js` → `PARTY_DATE`
+- Party date / countdown: `js/config.js` → `PARTY_DATE`
+- Party end (post-party mode): `js/config.js` → `PARTY_END`
 - Vote close time: `js/config.js` → `VOTE_CLOSE_TIME` (and matching env var on Vercel)
 - Max contestant number: `js/config.js` → `VOTE_MAX_NUMBER`
 - Default tag count: `js/config.js` → `VOTE_TAG_COUNT`

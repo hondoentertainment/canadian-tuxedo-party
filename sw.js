@@ -1,4 +1,4 @@
-const CACHE = "ctp-v4";
+const CACHE = "ctp-v5";
 const ASSETS = [
   "/",
   "/index.html",
@@ -7,7 +7,10 @@ const ASSETS = [
   "/js/main.js",
   "/js/qr.js",
   "/js/vote.js",
+  "/assets/poster.webp",
+  "/assets/poster-hero.jpg",
   "/assets/qr-code.png",
+  "/assets/app-icon.png",
   "/gallery.html",
   "/vote.html",
   "/host.html",
