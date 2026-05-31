@@ -32,7 +32,12 @@
   var selectedFile = null;
   var previewUrl = null;
   var blobClientPromise = null;
+  var preparedFilePromise = null;
   var SERVER_MAX_BYTES = 4 * 1024 * 1024;
+  var COMPRESS_SKIP_BYTES = 400 * 1024;
+  var COMPRESS_MAX_DIM = 2048;
+  var BLOB_CLIENT_URL =
+    "https://esm.sh/@vercel/blob@0.27.3/client?target=es2020";
 
   var EXT_TO_TYPE = {
     jpg: "image/jpeg",
@@ -92,11 +97,117 @@
 
   function loadBlobClient() {
     if (!blobClientPromise) {
-      blobClientPromise = import(
-        "https://esm.sh/@vercel/blob@0.27.3/client?target=es2020"
-      );
+      blobClientPromise = import(BLOB_CLIENT_URL);
     }
     return blobClientPromise;
+  }
+
+  function compressImage(file) {
+    return new Promise(function (resolve) {
+      if (!file || isVideoFile(file)) {
+        resolve(file);
+        return;
+      }
+
+      var type = fileContentType(file);
+      if (type === "image/gif" || file.size <= COMPRESS_SKIP_BYTES) {
+        resolve(file);
+        return;
+      }
+
+      var blobUrl = URL.createObjectURL(file);
+      var finished = false;
+
+      function done(result) {
+        if (finished) {
+          return;
+        }
+        finished = true;
+        URL.revokeObjectURL(blobUrl);
+        resolve(result || file);
+      }
+
+      function encodeCanvas(source, width, height) {
+        var scale = Math.min(1, COMPRESS_MAX_DIM / Math.max(width, height));
+        var cw = Math.max(1, Math.round(width * scale));
+        var ch = Math.max(1, Math.round(height * scale));
+
+        if (
+          scale === 1 &&
+          file.size <= 1024 * 1024 &&
+          type === "image/jpeg"
+        ) {
+          done(file);
+          return;
+        }
+
+        var canvas = document.createElement("canvas");
+        canvas.width = cw;
+        canvas.height = ch;
+        canvas.getContext("2d").drawImage(source, 0, 0, cw, ch);
+
+        if (source.close) {
+          source.close();
+        }
+
+        canvas.toBlob(
+          function (blob) {
+            if (!blob || blob.size >= file.size * 0.95) {
+              done(file);
+              return;
+            }
+            var base = String(file.name || "photo").replace(/\.[^.]+$/, "");
+            done(
+              new File([blob], base + ".jpg", {
+                type: "image/jpeg",
+                lastModified: Date.now(),
+              })
+            );
+          },
+          "image/jpeg",
+          0.82
+        );
+      }
+
+      if (window.createImageBitmap) {
+        createImageBitmap(file)
+          .then(function (bitmap) {
+            encodeCanvas(bitmap, bitmap.width, bitmap.height);
+          })
+          .catch(function () {
+            var img = new Image();
+            img.onload = function () {
+              encodeCanvas(img, img.naturalWidth, img.naturalHeight);
+            };
+            img.onerror = function () {
+              done(file);
+            };
+            img.src = blobUrl;
+          });
+        return;
+      }
+
+      var img = new Image();
+      img.onload = function () {
+        encodeCanvas(img, img.naturalWidth, img.naturalHeight);
+      };
+      img.onerror = function () {
+        done(file);
+      };
+      img.src = blobUrl;
+    });
+  }
+
+  function prepareUploadFile(file) {
+    return compressImage(file);
+  }
+
+  function safeUploadPath(file) {
+    var stem = String(file.name || "upload")
+      .replace(/\.[^.]+$/, "")
+      .replace(/[^\w.-]+/g, "-")
+      .slice(0, 48);
+    return "gallery/" + Date.now() + "-" + (stem || "upload");
   }
 
   function openDb() {
@@ -289,6 +400,7 @@
 
   function clearPreview() {
     selectedFile = null;
+    preparedFilePromise = null;
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);
       previewUrl = null;
@@ -350,6 +462,7 @@
     previewWrap.classList.remove("is-hidden");
     fileInput.style.pointerEvents = "none";
     setStatus("");
+    preparedFilePromise = prepareUploadFile(file);
   }
 
   if (fileInput) {
@@ -466,10 +579,11 @@
   function uploadViaClient(file, name, caption) {
     return loadBlobClient()
       .then(function (mod) {
-        return mod.upload(file.name || "upload", file, {
+        return mod.upload(safeUploadPath(file), file, {
           access: "public",
           handleUploadUrl: "/api/upload",
           contentType: fileContentType(file) || undefined,
+          multipart: file.size > 15 * 1024 * 1024,
         });
       })
       .then(function (blob) {
@@ -478,15 +592,15 @@
   }
 
   function uploadRemote(file, name, caption) {
-    if (file.size <= SERVER_MAX_BYTES) {
-      return uploadViaServer(file, name, caption).catch(function (error) {
-        if (error.code === "USE_CLIENT_UPLOAD") {
-          return uploadViaClient(file, name, caption);
-        }
-        throw error;
-      });
+    if (isVideoFile(file) || file.size > SERVER_MAX_BYTES) {
+      return uploadViaClient(file, name, caption);
     }
-    return uploadViaClient(file, name, caption);
+    return uploadViaServer(file, name, caption).catch(function (error) {
+      if (error.code === "USE_CLIENT_UPLOAD") {
+        return uploadViaClient(file, name, caption);
+      }
+      throw error;
+    });
   }
 
   if (form) {
@@ -503,14 +617,23 @@
       var uploadLabel = isVideoFile(selectedFile) ? "video" : "photo";
 
       submitBtn.disabled = true;
-      setStatus("Uploading your " + uploadLabel + "…");
+      setStatus("Preparing your " + uploadLabel + "…");
 
       checkApi()
         .then(function (hasApi) {
-          if (hasApi) {
-            return uploadRemote(selectedFile, name, caption);
+          if (!hasApi) {
+            return uploadLocal(selectedFile, name, caption);
           }
-          return uploadLocal(selectedFile, name, caption);
+
+          return (preparedFilePromise || prepareUploadFile(selectedFile))
+            .then(function (prepared) {
+              if (prepared !== selectedFile && !isVideoFile(prepared)) {
+                setStatus("Uploading optimized " + uploadLabel + "…");
+              } else {
+                setStatus("Uploading your " + uploadLabel + "…");
+              }
+              return uploadRemote(prepared, name, caption);
+            });
         })
         .then(function (data) {
           clearPreview();
@@ -531,4 +654,10 @@
 
   refreshGallery();
   setInterval(refreshGallery, 30000);
+
+  checkApi().then(function (hasApi) {
+    if (hasApi) {
+      loadBlobClient();
+    }
+  });
 })();
